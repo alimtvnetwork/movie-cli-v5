@@ -36,7 +36,7 @@ func Run() error {
 		return printBootstrapInfo(repoPath)
 	}
 
-	if prepErr := prepareRepoBranch(repoPath); prepErr != nil {
+	if prepErr := preflightRepo(repoPath); prepErr != nil {
 		return prepErr
 	}
 
