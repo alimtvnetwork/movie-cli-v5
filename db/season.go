@@ -18,11 +18,11 @@ type Season struct {
 
 // Episode represents a row in the Episode table.
 type Episode struct {
-	WatchedAt     sql.NullString
 	Name          string
 	Overview      string
 	AirDate       string
 	StillPath     string
+	WatchedAt     sql.NullString
 	ID            int64
 	SeasonID      int64
 	VoteAvg       float64

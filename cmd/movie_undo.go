@@ -26,10 +26,10 @@ import (
 )
 
 var (
-	undoListFlag    bool
-	undoBatchFlag   bool
-	undoActionID    int64
-	undoMoveID      int64
+	undoListFlag  bool
+	undoBatchFlag bool
+	undoActionID  int64
+	undoMoveID    int64
 )
 
 var movieUndoCmd = &cobra.Command{

@@ -15,9 +15,9 @@ import (
 type MoveContext struct {
 	Database  *db.DB
 	Scanner   *bufio.Scanner
-	Files     []os.FileInfo
 	SourceDir string
 	Home      string
+	Files     []os.FileInfo
 }
 
 // CleanupContext groups parameters for popout folder cleanup operations.
@@ -121,10 +121,10 @@ type SuggestTypeInput struct {
 
 // BatchMovePreview groups parameters for batch move preview generation.
 type BatchMovePreview struct {
-	Files     []os.FileInfo
 	SourceDir string
 	MoviesDir string
 	TVDir     string
+	Files     []os.FileInfo
 }
 
 // TrackMoveInput groups parameters for recording a file move operation.
@@ -210,9 +210,9 @@ type TrackScanResult struct {
 
 // DiscoverGenreInput groups parameters for genre-based discovery in suggestions.
 type DiscoverGenreInput struct {
-	Sorted    []genreCount
 	MediaType string
 	TypeName  string
+	Sorted    []genreCount
 }
 
 // FillRecoInput groups parameters for recommendation-based suggestion filling.
@@ -224,10 +224,10 @@ type FillRecoInput struct {
 // FinalizeScanInput groups parameters for post-scan finalization.
 type FinalizeScanInput struct {
 	Database  *db.DB
-	JSONItems []scanJSONItem
 	ScanDir   string
 	OutputDir string
 	Creds     tmdbCredentials
+	JSONItems []scanJSONItem
 	Removed   int
 	UseJSON   bool
 }
@@ -251,8 +251,8 @@ type DryRunOutput struct {
 type RemoveStaleInput struct {
 	DiskPaths     map[string]bool
 	Database      *db.DB
-	ExistingMedia []db.Media
 	BatchID       string
+	ExistingMedia []db.Media
 	Opts          ScanOutputOpts
 }
 
@@ -279,6 +279,6 @@ type HandleRescanInput struct {
 // AppendUniqueInput groups parameters for appending unique search results.
 type AppendUniqueInput struct {
 	DiscErr error
-	Results []tmdb.SearchResult
 	Filter  UniqueFilter
+	Results []tmdb.SearchResult
 }

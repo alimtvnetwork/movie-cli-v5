@@ -16,7 +16,6 @@ import (
 
 var watchExportOutput string
 
-
 var watchExportCmd = &cobra.Command{
 	Use:   "export",
 	Short: "Export watchlist as JSON",

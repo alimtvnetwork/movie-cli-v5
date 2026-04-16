@@ -32,9 +32,13 @@ func runMainScanLoop(ctx *ScanContext, videoFiles []videoFile, cfg ScanLoopConfi
 	for _, vf := range videoFiles {
 		if em, found := existingPaths[vf.FullPath]; found {
 			processExistingMedia(ctx, ProcessExistingInput{
-				EM: em, VF: vf, Client: client, Database: database,
-				Opts: ScanOutputOpts{UseTable: cfg.UseTable, UseJSON: cfg.UseJSON},
-				BatchID: cfg.BatchID, HasTMDb: cfg.HasTMDb,
+				EM:       em,
+				VF:       vf,
+				Client:   client,
+				Database: database,
+				Opts:     ScanOutputOpts{UseTable: cfg.UseTable, UseJSON: cfg.UseJSON},
+				BatchID:  cfg.BatchID,
+				HasTMDb:  cfg.HasTMDb,
 			})
 			continue
 		}
