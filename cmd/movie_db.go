@@ -17,6 +17,10 @@ var movieDBCmd = &cobra.Command{
 	Run:   runMovieDB,
 }
 
+func init() {
+	movieDBCmd.AddCommand(movieDBVersionCmd)
+}
+
 func runMovieDB(cmd *cobra.Command, args []string) {
 	database, err := db.Open()
 	if err != nil {
