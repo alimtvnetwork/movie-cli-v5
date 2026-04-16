@@ -107,7 +107,7 @@ func runMovieHistory(cmd *cobra.Command, args []string) {
 func printUnifiedDefault(records []unifiedRecord) {
 	fmt.Printf("📋 History (%d records)\n\n", len(records))
 
-	for _, r := range records {
+	for i := range records {
 		status := "✅"
 		if r.IsReverted {
 			status = "↩️ "

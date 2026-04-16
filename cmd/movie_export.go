@@ -165,9 +165,9 @@ func buildExportStorage(database *db.DB, items []db.Media) *exportStorage {
 	if len(items) > 0 {
 		st.AverageMb = totalSize / float64(len(items))
 	}
-	for _, m := range items {
-		if m.FileSizeMb == largest {
-			st.LargestTitle = m.CleanTitle
+	for i := range items {
+		if items[i].FileSizeMb == largest {
+			st.LargestTitle = items[i].CleanTitle
 			break
 		}
 	}

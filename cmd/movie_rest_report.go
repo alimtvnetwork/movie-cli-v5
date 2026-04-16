@@ -132,9 +132,7 @@ func buildReportData(items []db.Media, port int) htmlReportData {
 func buildHTMLReportItem(m db.Media) htmlReportItem {
 	var genres []string
 	if m.Genre != "" {
-		for _, g := range splitGenres(m.Genre) {
-			genres = append(genres, g)
-		}
+		genres = append(genres, splitGenres(m.Genre)...)
 	}
 	thumbSrc := ""
 	if m.ThumbnailPath != "" {

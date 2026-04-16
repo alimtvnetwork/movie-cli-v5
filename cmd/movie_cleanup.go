@@ -70,9 +70,9 @@ func runMovieCleanup(cmd *cobra.Command, args []string) {
 func printStaleEntries(stale []db.StaleEntry) {
 	fmt.Printf("🔍 Found %d stale entries (file missing from disk):\n", len(stale))
 	fmt.Println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-	for i, s := range stale {
-		fmt.Printf("  %d. [ID %d] %s (%d)\n", i+1, s.Media.ID, s.Media.Title, s.Media.Year)
-		fmt.Printf("     Missing: %s\n", s.FilePath)
+	for i := range stale {
+		fmt.Printf("  %d. [ID %d] %s (%d)\n", i+1, stale[i].Media.ID, stale[i].Media.Title, stale[i].Media.Year)
+		fmt.Printf("     Missing: %s\n", stale[i].FilePath)
 	}
 }
 
@@ -86,9 +86,9 @@ func confirmCleanupDelete(count int) bool {
 
 func deleteStaleEntries(database *db.DB, stale []db.StaleEntry) int {
 	deleted := 0
-	for _, s := range stale {
-		if err := database.DeleteMedia(s.Media.ID); err != nil {
-			errlog.Warn("Failed to delete ID %d: %v", s.Media.ID, err)
+	for i := range stale {
+		if err := database.DeleteMedia(stale[i].Media.ID); err != nil {
+			errlog.Warn("Failed to delete ID %d: %v", stale[i].Media.ID, err)
 			continue
 		}
 		deleted++

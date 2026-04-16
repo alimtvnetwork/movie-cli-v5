@@ -86,9 +86,9 @@ func printDuplicateGroups(groups []db.DuplicateGroup, label string) {
 
 	for i, g := range groups {
 		fmt.Printf("\n  Group %d — %s: %s (%d entries)\n", i+1, label, g.Key, len(g.Items))
-		for _, m := range g.Items {
-			path := resolveDuplicatePath(m)
-			fmt.Printf("    [ID %d] %s (%d) — %s\n", m.ID, m.Title, m.Year, path)
+		for j := range g.Items {
+			path := resolveDuplicatePath(g.Items[j])
+			fmt.Printf("    [ID %d] %s (%d) — %s\n", g.Items[j].ID, g.Items[j].Title, g.Items[j].Year, path)
 		}
 	}
 
