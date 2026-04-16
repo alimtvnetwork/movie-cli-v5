@@ -164,12 +164,6 @@ func handleSkippedMedia(ctx *ScanContext, em *db.Media, opts ScanOutputOpts) {
 	if opts.UseTable {
 		printScanTableRow(buildMediaTableRow(ctx.TotalFiles, em, "existing"))
 	} else if !opts.UseJSON {
-		typeIcon := db.TypeIcon(em.Type)
-		fmt.Printf("\n  %d. %s %s", ctx.TotalFiles, typeIcon, em.CleanTitle)
-		if em.Year > 0 {
-			fmt.Printf(" (%d)", em.Year)
-		}
-		fmt.Printf(" [%s]\n", em.Type)
-		fmt.Println("     ⏩ Already in database")
+		printSkippedText(ctx.TotalFiles, em)
 	}
 }
