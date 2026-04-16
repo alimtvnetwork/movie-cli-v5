@@ -37,10 +37,10 @@ func init() {
 
 // exportEnvelope is the top-level JSON structure.
 type exportEnvelope struct {
-	Meta    exportMeta        `json:"meta"`
 	Storage *exportStorage    `json:"storage,omitempty"`
 	Genres  []exportGenre     `json:"genres,omitempty"`
 	Media   []exportMediaJSON `json:"media"`
+	Meta    exportMeta        `json:"meta"`
 }
 
 type exportMeta struct {
