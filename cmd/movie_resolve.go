@@ -14,10 +14,10 @@
 package cmd
 
 import (
-	"github.com/alimtvnetwork/movie-cli-v4/apperror"
 	"strconv"
 	"strings"
 
+	"github.com/alimtvnetwork/movie-cli-v4/apperror"
 	"github.com/alimtvnetwork/movie-cli-v4/db"
 )
 
