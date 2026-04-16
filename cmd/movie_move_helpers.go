@@ -1,18 +1,5 @@
-// movie_move_helpers.go — shared helpers for move/rename/undo operations
-//
-// -- Shared helpers exported from this file --
-//
-//	expandHome(path, home)                     — resolve ~ in paths
-//	listVideoFiles(dir) ([]FileInfo, error)    — list video files in a directory
-//	humanSize(bytes) string                    — format bytes as human-readable size
-//	promptSourceDirectory(scanner, db, home)   — interactive source dir picker
-//	promptDestination(scanner, db, home)       — interactive destination picker
-//	MoveFile(src, dst) error                   — move with cross-device fallback
-//	crossDeviceMove(src, dst) error            — copy+delete for cross-filesystem moves
-//	saveHistoryLog(input HistoryLogInput)               — write move-log.json
-//
+// movie_move_helpers.go — shared helpers for move/rename/undo operations.
 // Consumers: movie_move.go, movie_rename.go, movie_undo.go, movie_stats.go
-//
 // Do NOT duplicate move/size/path logic elsewhere — use these helpers.
 package cmd
 
