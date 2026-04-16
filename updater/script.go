@@ -25,7 +25,8 @@ func executeUpdateWindows(repoPath, targetBinary string) error {
 // executeUpdateUnix runs the update via pwsh (if available) or direct commands.
 func executeUpdateUnix(repoPath, targetBinary string) error {
 	if !hasPwshWithRunPS1(repoPath) {
-		return executeUpdateDirect(repoPath, targetBinary)
+		runPS1 := filepath.Join(repoPath, "run.ps1")
+		return apperror.New("pwsh is required to run %s", runPS1)
 	}
 	scriptPath, err := writeUpdateScript(repoPath, targetBinary)
 	if err != nil {
@@ -142,23 +143,6 @@ if ($versionBinary -and (Test-Path $versionBinary)) {
 }
 Write-Host "  Version before: $oldVersion" -ForegroundColor Gray
 
-# Pull latest
-Set-Location $repoPath
-$pullOutput = git pull --ff-only 2>&1
-$pullText = ($pullOutput | ForEach-Object { "$_" }) -join [char]10
-
-if ($pullText -match "Already up to date") {
-    Write-Host ""
-    Write-Host "  Already up to date ($oldVersion)" -ForegroundColor Green
-    exit 0
-}
-
-Write-Host "  Pulled new changes" -ForegroundColor Cyan
-foreach ($line in $pullOutput) {
-    $text = "$line".Trim()
-    if ($text.Length -gt 0) { Write-Host "    $text" -ForegroundColor Gray }
-}
-
 # Wait for parent to release file handles
 Start-Sleep -Seconds 1.2
 
@@ -169,7 +153,8 @@ if (-not (Test-Path $runScript)) {
     exit 1
 }
 
-$deployArgs = @("-NoPull", "-Update")
+Write-Host "  Running update via $runScript" -ForegroundColor Cyan
+$deployArgs = @("-Update")
 if ($targetBinary) {
     $deployDir = Split-Path -Parent $targetBinary
     $targetName = Split-Path -Leaf $targetBinary

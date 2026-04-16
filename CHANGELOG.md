@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.96.0
+
+### Fixed
+- **`movie update` now persists the resolved repo path into the local DB** using `RepoPath`, so future update runs can reuse the actual machine repo location instead of relying only on binary-dir heuristics.
+- Added `movie update --repo-path <path>` as an explicit override, with trimming, quote cleanup, `~` expansion, absolute-path resolution, and validation against `.git` plus `go.mod` module `github.com/alimtvnetwork/movie-cli-v5`.
+- Removed leftover updater references to `movie-cli-v3` during sibling/bootstrap repo resolution; bootstrap clone now targets `movie-cli-v5` and the canonical v5 GitHub URL.
+- **Update handoff now runs only `run.ps1 -Update`** for git pull, build, and deploy; the generated worker script no longer performs its own `git pull`, keeping all mutable git/build logic inside `run.ps1` as intended.
+
 ## v2.95.0
 
 ### Fixed

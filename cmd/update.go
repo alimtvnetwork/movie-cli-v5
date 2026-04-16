@@ -20,16 +20,17 @@ var updateCmd = &cobra.Command{
 	Long: `Updates movie-cli by pulling latest source, rebuilding, and deploying.
 
 The update process:
-  1. Finds the source repository (binary dir, CWD, or sibling clone)
+	  1. Finds the source repository (flag, saved DB path, binary dir, CWD, or sibling clone)
   2. Creates a handoff copy of the binary (bypasses Windows file locks)
-  3. Pulls latest code from GitHub
-  4. Rebuilds via run.ps1 (go mod tidy → go build → deploy)
+	  3. Saves the resolved repo path into the local database for future updates
+	  4. Runs run.ps1 to pull, rebuild, and deploy
   5. Compares version before/after and shows changelog
 
 If no local repo is found, it clones a fresh copy next to the binary.
 Run 'movie update' again after bootstrap to build.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		exitOnUpdateError("Update failed", updater.Run())
+		repoPath, _ := cmd.Flags().GetString("repo-path")
+		exitOnUpdateError("Update failed", updater.Run(repoPath))
 	},
 }
 
@@ -76,6 +77,7 @@ var updateCleanupCmd = &cobra.Command{
 }
 
 func init() {
+	updateCmd.Flags().String("repo-path", "", "Path to the source repository")
 	updateRunnerCmd.Flags().String("repo-path", "", "Path to the source repository")
 	updateRunnerCmd.Flags().String("target-binary", "", "Original executable path to redeploy")
 }

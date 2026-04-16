@@ -19,16 +19,19 @@ import (
 )
 
 // repoURL is the canonical GitHub URL used when no local repo exists.
-const repoURL = "https://github.com/alimtvnetwork/movie-cli-v3.git"
+const repoURL = "https://github.com/alimtvnetwork/movie-cli-v5.git"
 
 // Run executes the update command: resolves repo, creates handoff copy, launches worker.
-func Run() error {
+func Run(repoPathFlag string) error {
 	if _, err := exec.LookPath("git"); err != nil {
 		return apperror.New("git is not installed or not in PATH")
 	}
 
-	repoPath, bootstrapped, err := findRepoPath()
+	repoPath, bootstrapped, err := findRepoPath(repoPathFlag)
 	if err != nil {
+		return err
+	}
+	if err := saveRepoPath(repoPath); err != nil {
 		return err
 	}
 
