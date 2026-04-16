@@ -1,4 +1,4 @@
-# build.ps1 — Pull, build, and deploy movie CLI
+﻿# build.ps1 -- Pull, build, and deploy movie CLI
 # Usage: pwsh build.ps1
 
 param(
@@ -33,7 +33,7 @@ if ($BinDir) {
 
 Write-Host ""
 Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
-Write-Host "  🔧 Movie CLI — Build & Deploy" -ForegroundColor Cyan
+Write-Host "  🔧 Movie CLI -- Build & Deploy" -ForegroundColor Cyan
 Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Cyan
 Write-Host ""
 
@@ -87,7 +87,7 @@ if ($IsWindows_) {
             Write-Host "   Installing go-winres..." -ForegroundColor Gray
             go install github.com/tc-hib/go-winres@v0.3.3
             if ($LASTEXITCODE -ne 0) {
-                Write-Host "⚠️  go-winres install failed — building without icon" -ForegroundColor Yellow
+                Write-Host "⚠️  go-winres install failed -- building without icon" -ForegroundColor Yellow
             }
         }
         if (Test-Path $winresBin) {
@@ -100,7 +100,7 @@ if ($IsWindows_) {
             Write-Host "✅ Icon embedded" -ForegroundColor Green
         }
     } else {
-        Write-Host "⚠️  Icon not found at $iconPath — building without icon" -ForegroundColor Yellow
+        Write-Host "⚠️  Icon not found at $iconPath -- building without icon" -ForegroundColor Yellow
     }
 }
 
@@ -161,7 +161,7 @@ $verifyExit = $LASTEXITCODE
 $ErrorActionPreference = $prevPref
 
 if ($verifyExit -eq 0) {
-    Write-Host "  🎉 Verified — movie-cli is ready!" -ForegroundColor Green
+    Write-Host "  🎉 Verified -- movie-cli is ready!" -ForegroundColor Green
 } else {
     Write-Host "  ⚠️  Binary deployed but 'movie version' failed (exit $verifyExit)." -ForegroundColor Yellow
     foreach ($line in $verifyOutput) { Write-Host "    $line" -ForegroundColor Yellow }

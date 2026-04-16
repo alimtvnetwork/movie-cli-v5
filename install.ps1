@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
  One-step bootstrap: clone (if needed), build, and deploy movie CLI.
 .DESCRIPTION
@@ -215,7 +215,7 @@ if ($verExit -eq 0) {
     } else {
         "Add the deploy directory to your PATH, then try again"
     }
-    Write-ErrorAndExit "Verification failed — the installed binary could not be executed" $hint
+    Write-ErrorAndExit "Verification failed -- the installed binary could not be executed" $hint
 }
 
 Write-Host ""
