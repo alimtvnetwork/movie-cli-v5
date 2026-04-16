@@ -1,6 +1,7 @@
 package updater
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -10,13 +11,27 @@ import (
 	"github.com/alimtvnetwork/movie-cli-v4/apperror"
 )
 
+// powershellConfigName is the build/deploy config file at the repo root.
+const powershellConfigName = "powershell.json"
+
+// powershellConfig mirrors the subset of powershell.json we need.
+type powershellConfig struct {
+	DeployPath  string `json:"deployPath"`
+	BuildOutput string `json:"buildOutput"`
+}
+
 // Cleanup removes leftover temp binaries and backup files from previous updates.
-// It cleans BOTH the active binary's directory AND the deploy directory (if different),
-// covering:
+// It scans every directory where artifacts may land:
+//   - active binary's directory
+//   - OS temp directory
+//   - deployPath from powershell.json (the actual deploy target)
+//   - buildOutput from powershell.json (intermediate build dir, e.g. ./bin)
+//
+// Patterns cleaned per directory:
 //   - <name>-update-*[.exe]   handoff copies from any prior PID
-//   - movie-update-*[.exe]    legacy handoff copies (pre-rebrand)
 //   - *.old                   rename-first deploy backups
 //   - *.bak                   legacy backup files
+//   - legacy binaries (movie*, mahin*) and their handoff copies
 func Cleanup() (int, error) {
 	cleaned := 0
 
@@ -50,11 +65,14 @@ func binaryBaseName(selfPath string) string {
 }
 
 // candidateDirs returns the unique directories to scan for leftovers:
-// the active binary's directory and the OS temp directory.
+// active binary dir, OS temp dir, deployPath, and buildOutput from powershell.json.
 func candidateDirs(selfPath string) []string {
 	seen := map[string]struct{}{}
 	var dirs []string
 	add := func(d string) {
+		if d == "" {
+			return
+		}
 		abs, err := filepath.Abs(d)
 		if err != nil {
 			return
@@ -63,13 +81,46 @@ func candidateDirs(selfPath string) []string {
 		if _, ok := seen[key]; ok {
 			return
 		}
+		if info, statErr := os.Stat(abs); statErr != nil || !info.IsDir() {
+			return
+		}
 		seen[key] = struct{}{}
 		dirs = append(dirs, abs)
 	}
+
 	add(filepath.Dir(selfPath))
 	add(os.TempDir())
+
+	cfg := loadPowershellConfig()
+	if cfg != nil {
+		add(cfg.DeployPath)
+		add(cfg.BuildOutput)
+	}
+
 	return dirs
 }
+
+// loadPowershellConfig reads powershell.json from the repo root.
+// Returns nil if the repo or file cannot be located.
+func loadPowershellConfig() *powershellConfig {
+	repoPath, _, err := findRepoPath()
+	if err != nil || repoPath == "" {
+		return nil
+	}
+	data, readErr := os.ReadFile(filepath.Join(repoPath, powershellConfigName))
+	if readErr != nil {
+		return nil
+	}
+	var cfg powershellConfig
+	if jsonErr := json.Unmarshal(data, &cfg); jsonErr != nil {
+		return nil
+	}
+	if cfg.BuildOutput != "" && !filepath.IsAbs(cfg.BuildOutput) {
+		cfg.BuildOutput = filepath.Join(repoPath, cfg.BuildOutput)
+	}
+	return &cfg
+}
+
 
 // cleanDir removes all known leftover patterns in a single directory.
 func cleanDir(dir, baseName, selfPath string) int {
