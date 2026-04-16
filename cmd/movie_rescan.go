@@ -64,8 +64,8 @@ func regenerateReportForDir(scanDir string, items []db.Media) {
 
 func countByType(items []db.Media) (int, int) {
 	movieCount, tvCount := 0, 0
-	for _, m := range items {
-		if m.Type == string(db.MediaTypeMovie) {
+	for i := range items {
+		if items[i].Type == string(db.MediaTypeMovie) {
 			movieCount++
 			continue
 		}
@@ -164,14 +164,14 @@ func applyRescanLimit(entries []db.Media) []db.Media {
 func processRescanEntries(database *db.DB, client *tmdb.Client, entries []db.Media) (int, int) {
 	fmt.Printf("\n🔄 Rescanning %d entries for TMDb metadata...\n\n", len(entries))
 	updated, failed := 0, 0
-	for i, m := range entries {
-		fmt.Printf("  %d/%d  %s", i+1, len(entries), m.CleanTitle)
-		if m.Year > 0 {
-			fmt.Printf(" (%d)", m.Year)
+	for i := range entries {
+		fmt.Printf("  %d/%d  %s", i+1, len(entries), entries[i].CleanTitle)
+		if entries[i].Year > 0 {
+			fmt.Printf(" (%d)", entries[i].Year)
 		}
 
-		if rescanMediaEntry(database, client, &m) {
-			fmt.Printf("  ✅ ⭐%.1f %s\n", m.TmdbRating, m.Genre)
+		if rescanMediaEntry(database, client, &entries[i]) {
+			fmt.Printf("  ✅ ⭐%.1f %s\n", entries[i].TmdbRating, entries[i].Genre)
 			updated++
 			continue
 		}

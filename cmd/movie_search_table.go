@@ -22,7 +22,7 @@ func printSearchResultsTable(results []tmdb.SearchResult) {
 		strings.Repeat("─", 6),
 		strings.Repeat("─", 6))
 
-	for i, r := range results {
+	for i := range results {
 		if i >= 15 {
 			break
 		}
