@@ -108,4 +108,3 @@ func buildMediaTableRow(index int, m *db.Media, status string) scanTableRow {
 		Status:     status,
 	}
 }
-
