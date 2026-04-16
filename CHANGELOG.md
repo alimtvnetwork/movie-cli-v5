@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.95.0
+
+### Fixed
+- **install.sh now exports PATH for the running script and prints a copy-paste refresh hint** — when invoked via `curl … | bash`, the script runs in a subshell and cannot mutate the parent interactive shell's environment (Unix process isolation). Previously the rc-file write happened silently and users were left wondering why `movie` was "not found" until they opened a new terminal.
+- The installer now ends with a clear one-liner (e.g. `export PATH="$HOME/.local/bin:$PATH"` or `fish_add_path …`) the user can paste to refresh their current shell immediately.
+- Messaging updated: "Added to ~/.zshrc (new shells will pick it up)" instead of just "Added to ~/.zshrc", removing ambiguity about why the current shell still doesn't see the binary.
+
 ## v2.94.0
 
 ### Fixed
