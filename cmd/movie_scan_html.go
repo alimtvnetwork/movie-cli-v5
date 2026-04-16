@@ -83,7 +83,8 @@ func writeHTMLReport(stats ScanStats) error {
 
 func buildHTMLReportItems(media []db.Media) []htmlReportItem {
 	items := make([]htmlReportItem, 0, len(media))
-	for _, m := range media {
+	for i := range media {
+		m := &media[i]
 		items = append(items, htmlReportItem{
 			ID: m.ID, Title: m.Title, Year: m.Year, Type: m.Type,
 			Genre: m.Genre, GenreList: splitGenreList(m.Genre),

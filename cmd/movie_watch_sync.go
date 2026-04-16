@@ -103,7 +103,8 @@ func buildWatchlistJSON(entries []db.WatchlistEntry) watchlistJSON {
 		ExportedAt: db.NowUTC(),
 		Count:      len(entries),
 	}
-	for _, e := range entries {
+	for i := range entries {
+		e := &entries[i]
 		entry := watchEntryJSON{
 			TmdbID: e.TmdbID, Title: e.Title, Year: e.Year,
 			Type: e.Type, Status: e.Status, AddedAt: e.AddedAt,

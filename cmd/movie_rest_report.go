@@ -108,14 +108,15 @@ func serveHTMLReport(w http.ResponseWriter, database *db.DB, port int) {
 func buildReportData(items []db.Media, port int) htmlReportData {
 	movies, tv := 0, 0
 	reportItems := make([]htmlReportItem, 0, len(items))
-	for _, m := range items {
+	for i := range items {
+		m := &items[i]
 		if m.Type == string(db.MediaTypeMovie) {
 			movies++
 		}
 		if m.Type != string(db.MediaTypeMovie) {
 			tv++
 		}
-		reportItems = append(reportItems, buildHTMLReportItem(m))
+		reportItems = append(reportItems, buildHTMLReportItem(*m))
 	}
 
 	return htmlReportData{

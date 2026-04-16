@@ -23,11 +23,11 @@ import (
 )
 
 var (
-	historyFormat  string
-	historyType    string
-	historyBatch   string
-	historySince   string
-	historyLimit   int
+	historyFormat string
+	historyType   string
+	historyBatch  string
+	historySince  string
+	historyLimit  int
 )
 
 var movieHistoryCmd = &cobra.Command{

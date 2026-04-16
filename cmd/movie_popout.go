@@ -58,8 +58,8 @@ type popoutItem struct {
 	destPath  string
 	cleanName string
 	subDir    string
-	size      int64
 	result    cleaner.Result
+	size      int64
 }
 
 // popoutFolderInfo holds info about a subfolder for the cleanup phase.

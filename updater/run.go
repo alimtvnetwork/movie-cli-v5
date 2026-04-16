@@ -36,8 +36,8 @@ func Run() error {
 		return printBootstrapInfo(repoPath)
 	}
 
-	if err := prepareRepoBranch(repoPath); err != nil {
-		return err
+	if prepErr := prepareRepoBranch(repoPath); prepErr != nil {
+		return prepErr
 	}
 
 	selfPath, err := resolveSelfPath()

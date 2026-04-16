@@ -10,8 +10,8 @@ import (
 
 // Migration represents a single versioned schema migration.
 type Migration struct {
-	Description string
 	Apply       func(d *DB) error
+	Description string
 	Version     int
 }
 

@@ -72,7 +72,8 @@ func buildDestName(origName string, result cleaner.Result) string {
 
 // executePopout moves all discovered files and tracks each in the database.
 func executePopout(database *db.DB, items []popoutItem, batchID string) (success, failed int) {
-	for _, item := range items {
+	for i := range items {
+		item := &items[i]
 		if _, err := os.Stat(item.destPath); err == nil {
 			errlog.Warn("Skipped (already exists): %s", item.destPath)
 			failed++
@@ -97,7 +98,7 @@ func executePopout(database *db.DB, items []popoutItem, batchID string) (success
 }
 
 // trackPopoutMove records the popout in move_history and updates/creates media.
-func trackPopoutMove(database *db.DB, item popoutItem, batchID string) int64 {
+func trackPopoutMove(database *db.DB, item *popoutItem, batchID string) int64 {
 	mediaID := findPopoutMedia(database, item)
 
 	if mediaID != 0 {
@@ -126,7 +127,7 @@ func trackPopoutMove(database *db.DB, item popoutItem, batchID string) int64 {
 	return mediaID
 }
 
-func findPopoutMedia(database *db.DB, item popoutItem) int64 {
+func findPopoutMedia(database *db.DB, item *popoutItem) int64 {
 	existing, searchErr := database.SearchMedia(item.result.CleanTitle)
 	if searchErr != nil {
 		errlog.Warn("DB search error: %v", searchErr)
@@ -139,7 +140,7 @@ func findPopoutMedia(database *db.DB, item popoutItem) int64 {
 	return 0
 }
 
-func insertPopoutMedia(database *db.DB, item popoutItem) int64 {
+func insertPopoutMedia(database *db.DB, item *popoutItem) int64 {
 	m := &db.Media{
 		Title:            item.result.CleanTitle,
 		CleanTitle:       item.result.CleanTitle,

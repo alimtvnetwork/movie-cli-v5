@@ -77,7 +77,8 @@ func buildSummaryItems(media []db.Media) ([]scanSummaryItem, map[string][]string
 	categories := make(map[string][]string)
 	items := make([]scanSummaryItem, 0, len(media))
 
-	for _, m := range media {
+	for i := range media {
+		m := &media[i]
 		items = append(items, scanSummaryItem{
 			Title: m.Title, Year: m.Year, Type: m.Type,
 			Genre: m.Genre, Director: m.Director, CastList: m.CastList,
@@ -92,7 +93,7 @@ func buildSummaryItems(media []db.Media) ([]scanSummaryItem, map[string][]string
 	return items, categories
 }
 
-func categorizeByGenre(categories map[string][]string, m db.Media) {
+func categorizeByGenre(categories map[string][]string, m *db.Media) {
 	if m.Genre == "" {
 		return
 	}

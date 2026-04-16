@@ -3,9 +3,9 @@ package db
 
 // SchemaVersionEntry represents a single migration record.
 type SchemaVersionEntry struct {
-	Version     int
 	Description string
 	AppliedAt   string
+	Version     int
 }
 
 // ListSchemaVersions returns all applied migrations ordered by version.

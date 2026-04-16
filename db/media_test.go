@@ -35,8 +35,8 @@ func TestInsertMediaAllowsMissingTMDbID(t *testing.T) {
 	if err != nil {
 		t.Fatalf("first insert: %v", err)
 	}
-	if _, err := d.InsertMedia(&Media{Title: "Local Two", CleanTitle: "local two", Type: "movie"}); err != nil {
-		t.Fatalf("second insert with empty TmdbId should store NULL: %v", err)
+	if _, err2 := d.InsertMedia(&Media{Title: "Local Two", CleanTitle: "local two", Type: "movie"}); err2 != nil {
+		t.Fatalf("second insert with empty TmdbId should store NULL: %v", err2)
 	}
 
 	m, err := d.GetMediaByID(id1)
@@ -205,7 +205,7 @@ func TestTags(t *testing.T) {
 		t.Errorf("got %d tags, want 2", len(tags))
 	}
 
-	if err := d.AddTag(int(id), "favorite"); err == nil {
+	if dupErr := d.AddTag(int(id), "favorite"); dupErr == nil {
 		t.Error("expected error on duplicate tag")
 	}
 
@@ -251,8 +251,8 @@ func TestMoveHistory(t *testing.T) {
 		t.Errorf("move record: from=%q to=%q", rec.FromPath, rec.ToPath)
 	}
 
-	if err := d.MarkMoveReverted(rec.ID); err != nil {
-		t.Fatalf("undo: %v", err)
+	if revErr := d.MarkMoveReverted(rec.ID); revErr != nil {
+		t.Fatalf("undo: %v", revErr)
 	}
 
 	_, err = d.GetLastMove()

@@ -5,31 +5,31 @@ import "database/sql"
 
 // Season represents a row in the Season table.
 type Season struct {
-	ID           int64
-	MediaID      int64
-	SeasonNumber int
-	TmdbSeasonID int
 	Name         string
 	Overview     string
 	PosterPath   string
 	AirDate      string
+	ID           int64
+	MediaID      int64
+	SeasonNumber int
+	TmdbSeasonID int
 	EpisodeCount int
 }
 
 // Episode represents a row in the Episode table.
 type Episode struct {
-	ID            int64
-	SeasonID      int64
-	EpisodeNumber int
-	TmdbEpisodeID int
+	WatchedAt     sql.NullString
 	Name          string
 	Overview      string
 	AirDate       string
-	Runtime       int
 	StillPath     string
+	ID            int64
+	SeasonID      int64
 	VoteAvg       float64
+	EpisodeNumber int
+	TmdbEpisodeID int
+	Runtime       int
 	IsWatched     bool
-	WatchedAt     sql.NullString
 }
 
 // InsertSeason upserts a season for a media entry.

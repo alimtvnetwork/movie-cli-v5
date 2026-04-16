@@ -156,7 +156,8 @@ func runWatchLs(cmd *cobra.Command, args []string) {
 
 	fmt.Println(watchListHeader())
 	fmt.Println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-	for i, e := range entries {
+	for i := range entries {
+		e := &entries[i]
 		icon := watchStatusIcon(e.Status)
 		fmt.Printf("  %d. %s %s (%d) [%s]\n", i+1, icon, e.Title, e.Year, e.Type)
 	}

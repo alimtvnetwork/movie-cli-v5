@@ -32,7 +32,8 @@ func (d *DB) FindStaleEntries(limit int) ([]StaleEntry, error) {
 	}
 
 	var stale []StaleEntry
-	for _, m := range all {
+	for i := range all {
+		m := &all[i]
 		path := m.CurrentFilePath
 		if path == "" {
 			path = m.OriginalFilePath
@@ -45,7 +46,7 @@ func (d *DB) FindStaleEntries(limit int) ([]StaleEntry, error) {
 			continue
 		}
 		if os.IsNotExist(statErr) {
-			stale = append(stale, StaleEntry{Media: m, FilePath: path})
+			stale = append(stale, StaleEntry{Media: *m, FilePath: path})
 			continue
 		}
 		fmt.Fprintf(os.Stderr, "⚠️  Cannot stat %s: %v\n", path, statErr)

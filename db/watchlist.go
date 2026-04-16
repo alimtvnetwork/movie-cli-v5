@@ -5,24 +5,24 @@ import "database/sql"
 
 // WatchlistEntry represents a row in the Watchlist table.
 type WatchlistEntry struct {
-	ID        int64
-	MediaID   sql.NullInt64
-	TmdbID    int
+	WatchedAt sql.NullString
 	Title     string
-	Year      int
 	Type      string // MediaTypeMovie or MediaTypeTV
 	Status    string // WatchStatusToWatch or WatchStatusWatched
 	AddedAt   string
-	WatchedAt sql.NullString
+	MediaID   sql.NullInt64
+	ID        int64
+	TmdbID    int
+	Year      int
 }
 
 // WatchlistInput holds fields for adding to the watchlist.
 type WatchlistInput struct {
-	TmdbID    int
 	Title     string
-	Year      int
 	MediaType string
 	MediaID   int64
+	TmdbID    int
+	Year      int
 }
 
 // AddToWatchlist inserts or updates a watchlist entry as "to-watch".

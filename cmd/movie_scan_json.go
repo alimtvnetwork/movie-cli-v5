@@ -10,7 +10,6 @@
 package cmd
 
 import (
-	"github.com/alimtvnetwork/movie-cli-v4/apperror"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -18,6 +17,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/alimtvnetwork/movie-cli-v4/apperror"
 	"github.com/alimtvnetwork/movie-cli-v4/cleaner"
 	"github.com/alimtvnetwork/movie-cli-v4/db"
 )
