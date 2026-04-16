@@ -55,25 +55,25 @@ func (f FileActionType) String() string {
 
 // ActionRecord represents a row in ActionHistory.
 type ActionRecord struct {
-	ActionHistoryId int64
-	FileActionId    FileActionType
-	MediaId         sql.NullInt64
 	MediaSnapshot   string
 	Detail          string
 	BatchId         string
-	IsReverted      bool
 	CreatedAt       string
+	MediaId         sql.NullInt64
+	ActionHistoryId int64
+	FileActionId    FileActionType
+	IsReverted      bool
 }
 
 const actionCols = `ActionHistoryId, FileActionId, MediaId, MediaSnapshot, Detail, BatchId, IsReverted, CreatedAt`
 
 // ActionInput holds fields for inserting an action history record.
 type ActionInput struct {
-	FileAction FileActionType
-	MediaID    sql.NullInt64
 	Snapshot   string
 	Detail     string
 	BatchID    string
+	MediaID    sql.NullInt64
+	FileAction FileActionType
 }
 
 // InsertAction logs a state-changing action to ActionHistory.

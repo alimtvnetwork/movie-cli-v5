@@ -16,12 +16,12 @@ import (
 
 // moveItem groups data for a single batch move operation.
 type moveItem struct {
+	fileInfo  os.FileInfo
 	srcPath   string
 	destPath  string
 	destDir   string
 	cleanName string
 	result    cleaner.Result
-	fileInfo  os.FileInfo
 }
 
 // runBatchMove moves all video files at once, auto-routing by type.

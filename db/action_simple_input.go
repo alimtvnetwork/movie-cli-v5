@@ -3,9 +3,9 @@ package db
 
 // ActionSimpleInput groups parameters for the InsertActionSimple convenience wrapper.
 type ActionSimpleInput struct {
-	FileAction FileActionType
-	MediaID    int64
 	Snapshot   string
 	Detail     string
 	BatchID    string
+	MediaID    int64
+	FileAction FileActionType
 }

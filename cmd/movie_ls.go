@@ -35,22 +35,22 @@ func init() {
 
 // lsJSONItem represents a single media item in JSON output.
 type lsJSONItem struct {
-	ID         int64   `json:"id"`
 	Title      string  `json:"title"`
 	CleanTitle string  `json:"clean_title"`
-	Year       int     `json:"year,omitempty"`
 	Type       string  `json:"type"`
-	TmdbID     int     `json:"tmdb_id,omitempty"`
 	ImdbID     string  `json:"imdb_id,omitempty"`
+	Genre      string  `json:"genre,omitempty"`
+	Director   string  `json:"director,omitempty"`
+	Language   string  `json:"language,omitempty"`
+	FilePath   string  `json:"file_path,omitempty"`
+	ID         int64   `json:"id"`
+	FileSize   int64   `json:"file_size,omitempty"`
 	TmdbRating float64 `json:"tmdb_rating,omitempty"`
 	ImdbRating float64 `json:"imdb_rating,omitempty"`
 	Popularity float64 `json:"popularity,omitempty"`
-	Genre      string  `json:"genre,omitempty"`
-	Director   string  `json:"director,omitempty"`
+	Year       int     `json:"year,omitempty"`
+	TmdbID     int     `json:"tmdb_id,omitempty"`
 	Runtime    int     `json:"runtime,omitempty"`
-	Language   string  `json:"language,omitempty"`
-	FilePath   string  `json:"file_path,omitempty"`
-	FileSize   int64   `json:"file_size,omitempty"`
 }
 
 func runMovieLs(cmd *cobra.Command, args []string) {

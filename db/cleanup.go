@@ -8,8 +8,8 @@ import (
 
 // StaleEntry represents a media record whose file is missing from disk.
 type StaleEntry struct {
-	Media    Media
 	FilePath string
+	Media    Media
 }
 
 // FindStaleEntries returns media records where CurrentFilePath or

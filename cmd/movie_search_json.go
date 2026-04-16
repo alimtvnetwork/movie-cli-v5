@@ -12,16 +12,16 @@ import (
 
 // searchJSONItem represents a single TMDb search result in JSON output.
 type searchJSONItem struct {
-	Index      int     `json:"index"`
 	Title      string  `json:"title"`
 	Year       string  `json:"year,omitempty"`
 	Type       string  `json:"type"`
-	TmdbID     int     `json:"tmdb_id"`
-	Rating     float64 `json:"rating"`
-	Popularity float64 `json:"popularity"`
 	Overview   string  `json:"overview,omitempty"`
 	PosterPath string  `json:"poster_path,omitempty"`
 	GenreIDs   []int   `json:"genre_ids,omitempty"`
+	Rating     float64 `json:"rating"`
+	Popularity float64 `json:"popularity"`
+	Index      int     `json:"index"`
+	TmdbID     int     `json:"tmdb_id"`
 }
 
 // printSearchResultsJSON outputs search results as a JSON array to stdout.

@@ -49,18 +49,18 @@ func init() {
 // watchlistJSON is the export/import format.
 type watchlistJSON struct {
 	ExportedAt string           `json:"exported_at"`
-	Count      int              `json:"count"`
 	Entries    []watchEntryJSON `json:"entries"`
+	Count      int              `json:"count"`
 }
 
 type watchEntryJSON struct {
-	TmdbID    int    `json:"tmdb_id"`
 	Title     string `json:"title"`
-	Year      int    `json:"year"`
 	Type      string `json:"type"`
 	Status    string `json:"status"`
 	AddedAt   string `json:"added_at"`
 	WatchedAt string `json:"watched_at,omitempty"`
+	TmdbID    int    `json:"tmdb_id"`
+	Year      int    `json:"year"`
 }
 
 func runWatchExport(cmd *cobra.Command, args []string) {

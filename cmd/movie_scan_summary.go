@@ -16,34 +16,34 @@ import (
 type scanSummary struct {
 	ScannedFolder string              `json:"scanned_folder"`
 	ScannedAt     string              `json:"scanned_at"`
+	Categories    map[string][]string `json:"categories"`
+	Items         []scanSummaryItem   `json:"items"`
 	TotalFiles    int                 `json:"total_files"`
 	Movies        int                 `json:"movies"`
 	TVShows       int                 `json:"tv_shows"`
 	Skipped       int                 `json:"skipped"`
-	Categories    map[string][]string `json:"categories"`
-	Items         []scanSummaryItem   `json:"items"`
 }
 
 // scanSummaryItem is per-media metadata in the summary.
 type scanSummaryItem struct {
 	Title       string  `json:"title"`
-	Year        int     `json:"year,omitempty"`
 	Type        string  `json:"type"`
 	Genre       string  `json:"genre,omitempty"`
 	Director    string  `json:"director,omitempty"`
 	CastList    string  `json:"cast_list,omitempty"`
 	Description string  `json:"description,omitempty"`
-	TmdbID      int     `json:"tmdb_id,omitempty"`
 	ImdbID      string  `json:"imdb_id,omitempty"`
-	TmdbRating  float64 `json:"tmdb_rating,omitempty"`
-	ImdbRating  float64 `json:"imdb_rating,omitempty"`
-	Runtime     int     `json:"runtime,omitempty"`
 	Language    string  `json:"language,omitempty"`
 	Tagline     string  `json:"tagline,omitempty"`
 	TrailerURL  string  `json:"trailer_url,omitempty"`
 	FilePath    string  `json:"file_path"`
 	FileName    string  `json:"file_name"`
 	FileSize    int64   `json:"file_size,omitempty"`
+	TmdbRating  float64 `json:"tmdb_rating,omitempty"`
+	ImdbRating  float64 `json:"imdb_rating,omitempty"`
+	Year        int     `json:"year,omitempty"`
+	TmdbID      int     `json:"tmdb_id,omitempty"`
+	Runtime     int     `json:"runtime,omitempty"`
 }
 
 // writeScanSummary writes .movie-output/summary.json with the full scan report.

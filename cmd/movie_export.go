@@ -44,17 +44,17 @@ type exportEnvelope struct {
 }
 
 type exportMeta struct {
+	ExportedAt  string `json:"exported_at"`
 	TotalItems  int    `json:"total_items"`
 	TotalMovies int    `json:"total_movies"`
 	TotalTV     int    `json:"total_tv_shows"`
-	ExportedAt  string `json:"exported_at"`
 }
 
 type exportStorage struct {
-	TotalSizeMb  float64 `json:"total_size_mb"`
 	TotalHuman   string  `json:"total_human"`
-	LargestMb    float64 `json:"largest_file_mb"`
 	LargestTitle string  `json:"largest_file_title,omitempty"`
+	TotalSizeMb  float64 `json:"total_size_mb"`
+	LargestMb    float64 `json:"largest_file_mb"`
 	SmallestMb   float64 `json:"smallest_file_mb"`
 	AverageMb    float64 `json:"average_file_mb"`
 }

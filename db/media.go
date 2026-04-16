@@ -15,26 +15,27 @@ type Media struct {
 	FileExtension    string
 	TrailerURL       string
 	Tagline          string
-	ID               int64
-	Budget           int64
-	Revenue          int64
-	ImdbRating       float64
-	TmdbRating       float64
-	Popularity       float64
-	FileSizeMb       float64
-	Year             int
-	TmdbID           int
-	Runtime          int
-	LanguageId       int
-	CollectionId     int
-	ScanHistoryId    int
 
 	// Compat fields — populated from views or for legacy cmd code.
 	// These are NOT stored in the Media table directly.
-	Genre    string `json:"genre,omitempty"`    // aggregated from MediaGenre+Genre
+	Genre    string `json:"genre,omitempty"`     // aggregated from MediaGenre+Genre
 	CastList string `json:"cast_list,omitempty"` // aggregated from MediaCast+Cast
-	Language string `json:"language,omitempty"` // resolved from Language.Code
-	FileSize int64  `json:"file_size,omitempty"` // computed: FileSizeMb * 1024 * 1024
+	Language string `json:"language,omitempty"`  // resolved from Language.Code
+
+	ID         int64
+	Budget     int64
+	Revenue    int64
+	FileSize   int64   `json:"file_size,omitempty"` // computed: FileSizeMb * 1024 * 1024
+	ImdbRating float64
+	TmdbRating float64
+	Popularity float64
+	FileSizeMb float64
+	Year          int
+	TmdbID        int
+	Runtime       int
+	LanguageId    int
+	CollectionId  int
+	ScanHistoryId int
 }
 
 // mediaColumns is the standard SELECT column list for Media queries.

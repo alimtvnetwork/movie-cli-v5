@@ -17,15 +17,15 @@ import (
 type ScanContext struct {
 	Database     *db.DB
 	Client       *tmdb.Client
-	HasTMDb      bool
 	OutputDir    string
+	BatchID      string
+	ScannedItems []db.Media
 	TotalFiles   int
 	MovieCount   int
 	TVCount      int
 	Skipped      int
-	ScannedItems []db.Media
+	HasTMDb      bool
 	UseTable     bool
-	BatchID      string
 }
 
 // processVideoFile handles a single video file: clean, check DB, fetch TMDb, insert, write JSON.

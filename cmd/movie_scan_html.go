@@ -19,30 +19,30 @@ const defaultRESTPort = 8086
 type htmlReportData struct {
 	ScannedFolder string
 	ScannedAt     string
+	Items         []htmlReportItem
 	TotalFiles    int
 	Movies        int
 	TVShows       int
 	Skipped       int
 	Port          int
-	Items         []htmlReportItem
 }
 
 // htmlReportItem represents a single media item in the HTML report.
 type htmlReportItem struct {
-	ID            int64
 	Title         string
-	Year          int
 	Type          string
 	Genre         string
-	GenreList     []string
 	Director      string
 	CastList      string
 	Description   string
 	Tagline       string
+	ThumbnailPath string
+	GenreList     []string
+	ID            int64
 	TmdbRating    float64
 	ImdbRating    float64
+	Year          int
 	Runtime       int
-	ThumbnailPath string
 }
 
 // writeHTMLReport generates report.html in the output directory.

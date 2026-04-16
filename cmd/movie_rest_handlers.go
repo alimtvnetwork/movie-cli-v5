@@ -51,8 +51,8 @@ func handleTagsGet(w http.ResponseWriter, r *http.Request, database *db.DB) {
 
 func handleTagsPost(w http.ResponseWriter, r *http.Request, database *db.DB) {
 	var req struct {
-		MediaID int    `json:"media_id"`
 		Tag     string `json:"tag"`
+		MediaID int    `json:"media_id"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "invalid json", http.StatusBadRequest)
@@ -71,8 +71,8 @@ func handleTagsPost(w http.ResponseWriter, r *http.Request, database *db.DB) {
 
 func handleTagsDelete(w http.ResponseWriter, r *http.Request, database *db.DB) {
 	var req struct {
-		MediaID int    `json:"media_id"`
 		Tag     string `json:"tag"`
+		MediaID int    `json:"media_id"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "invalid json", http.StatusBadRequest)

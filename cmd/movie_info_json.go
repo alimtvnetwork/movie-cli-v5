@@ -11,30 +11,30 @@ import (
 
 // infoJSONOutput represents a media item in JSON output for movie info.
 type infoJSONOutput struct {
-	ID          int64   `json:"id"`
 	Title       string  `json:"title"`
 	CleanTitle  string  `json:"clean_title"`
-	Year        int     `json:"year"`
 	Type        string  `json:"type"`
-	TmdbID      int     `json:"tmdb_id,omitempty"`
 	ImdbID      string  `json:"imdb_id,omitempty"`
-	TmdbRating  float64 `json:"tmdb_rating"`
-	ImdbRating  float64 `json:"imdb_rating,omitempty"`
-	Popularity  float64 `json:"popularity,omitempty"`
 	Genre       string  `json:"genre,omitempty"`
 	Director    string  `json:"director,omitempty"`
 	Cast        string  `json:"cast,omitempty"`
-	Runtime     int     `json:"runtime,omitempty"`
 	Language    string  `json:"language,omitempty"`
 	Tagline     string  `json:"tagline,omitempty"`
 	Description string  `json:"description,omitempty"`
 	TrailerURL  string  `json:"trailer_url,omitempty"`
-	Budget      int64   `json:"budget,omitempty"`
-	Revenue     int64   `json:"revenue,omitempty"`
 	FilePath    string  `json:"file_path,omitempty"`
-	FileSize    int64   `json:"file_size,omitempty"`
 	Thumbnail   string  `json:"thumbnail,omitempty"`
 	Source      string  `json:"source"` // "local" or "tmdb"
+	ID          int64   `json:"id"`
+	Budget      int64   `json:"budget,omitempty"`
+	Revenue     int64   `json:"revenue,omitempty"`
+	FileSize    int64   `json:"file_size,omitempty"`
+	TmdbRating  float64 `json:"tmdb_rating"`
+	ImdbRating  float64 `json:"imdb_rating,omitempty"`
+	Popularity  float64 `json:"popularity,omitempty"`
+	Year        int     `json:"year"`
+	TmdbID      int     `json:"tmdb_id,omitempty"`
+	Runtime     int     `json:"runtime,omitempty"`
 }
 
 // printMediaDetailJSON outputs a media item as JSON to stdout.

@@ -60,11 +60,11 @@ type TVDetails struct {
 	Tagline          string   `json:"tagline"`
 	Genres           []Genre  `json:"genres"`
 	Languages        []string `json:"languages"`
+	EpisodeRunTime   []int    `json:"episode_run_time"`
 	VoteAvg          float64  `json:"vote_average"`
 	Popularity       float64  `json:"popularity"`
 	ID               int      `json:"id"`
 	Seasons          int      `json:"number_of_seasons"`
-	EpisodeRunTime   []int    `json:"episode_run_time"`
 }
 
 // Genre is a TMDb genre.

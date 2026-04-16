@@ -42,12 +42,12 @@ func (d *DB) ListMoveHistory(limit int) ([]MoveRecord, error) {
 
 // MoveInput holds fields needed to insert a move history record.
 type MoveInput struct {
-	MediaID      int64
-	FileActionID int
 	FromPath     string
 	ToPath       string
 	OrigName     string
 	NewName      string
+	MediaID      int64
+	FileActionID int
 }
 
 // InsertMoveHistory logs a move operation.
@@ -102,6 +102,7 @@ func (d *DB) GetLastRevertedMove() (*MoveRecord, error) {
 
 // ScanRecord represents a row in ScanHistory.
 type ScanRecord struct {
+	ScannedAt    string
 	ID           int64
 	ScanFolderId int
 	TotalFiles   int
@@ -112,7 +113,6 @@ type ScanRecord struct {
 	UpdatedFiles int
 	ErrorCount   int
 	DurationMs   int
-	ScannedAt    string
 }
 
 // ListScanHistory returns recent scan history records.
@@ -169,11 +169,11 @@ func (d *DB) InsertScanHistory(input ScanHistoryInput) error {
 
 // ScanFolderRecord represents a row in ScanFolder.
 type ScanFolderRecord struct {
-	ID         int64
 	FolderPath string
-	IsActive   bool
 	CreatedAt  string
 	UpdatedAt  string
+	ID         int64
+	IsActive   bool
 }
 
 // UpsertScanFolder inserts or returns existing scan folder ID.

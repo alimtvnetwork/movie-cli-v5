@@ -11,13 +11,13 @@ import (
 
 // scanTableRow holds data for one row in the scan table output.
 type scanTableRow struct {
-	Index      int
 	FileName   string
 	CleanTitle string
-	Year       int
 	Type       string
-	Rating     float64
 	Status     string // "new", "skipped", "error"
+	Rating     float64
+	Index      int
+	Year       int
 }
 
 // printScanTableHeader prints the table header row.

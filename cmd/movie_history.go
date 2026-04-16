@@ -56,13 +56,13 @@ func init() {
 // unifiedRecord merges move_history and action_history into one display item.
 type unifiedRecord struct {
 	Source     string `json:"source"`
-	ID         int64  `json:"id"`
 	Type       string `json:"type"`
 	Detail     string `json:"detail"`
 	FromPath   string `json:"from_path,omitempty"`
 	ToPath     string `json:"to_path,omitempty"`
 	BatchID    string `json:"batch_id,omitempty"`
 	Timestamp  string `json:"timestamp"`
+	ID         int64  `json:"id"`
 	IsReverted bool   `json:"is_reverted"`
 }
 

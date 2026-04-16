@@ -33,18 +33,18 @@ func init() {
 
 // statsJSONOutput is the JSON structure for --format json.
 type statsJSONOutput struct {
-	TotalMovies int           `json:"total_movies"`
-	TotalTV     int           `json:"total_tv_shows"`
-	Total       int           `json:"total"`
 	Storage     *statsStorage `json:"storage,omitempty"`
 	TopGenres   []statsGenre  `json:"top_genres,omitempty"`
 	AvgImdb     float64       `json:"avg_imdb_rating,omitempty"`
 	AvgTmdb     float64       `json:"avg_tmdb_rating,omitempty"`
+	TotalMovies int           `json:"total_movies"`
+	TotalTV     int           `json:"total_tv_shows"`
+	Total       int           `json:"total"`
 }
 
 type statsStorage struct {
-	TotalSize    int64  `json:"total_bytes"`
 	TotalHuman   string `json:"total_human"`
+	TotalSize    int64  `json:"total_bytes"`
 	LargestFile  int64  `json:"largest_file_bytes"`
 	SmallestFile int64  `json:"smallest_file_bytes"`
 	AverageSize  int64  `json:"average_bytes"`

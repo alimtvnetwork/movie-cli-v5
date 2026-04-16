@@ -10,9 +10,9 @@ import (
 
 // Migration represents a single versioned schema migration.
 type Migration struct {
-	Version     int
 	Description string
 	Apply       func(d *DB) error
+	Version     int
 }
 
 // allMigrations returns all registered migrations in order.
