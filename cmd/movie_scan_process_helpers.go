@@ -83,7 +83,7 @@ func handleInsertError(ctx *ScanContext, m *db.Media, insertErr error) {
 
 	existing, _ := ctx.Database.GetMediaByTmdbID(m.TmdbID)
 	if existing != nil {
-		ctx.Database.ReplaceMediaGenres(existing.ID, m.Genre)
+		_ = ctx.Database.ReplaceMediaGenres(existing.ID, m.Genre)
 	}
 }
 
@@ -93,7 +93,7 @@ func trackScanAction(ctx *ScanContext, result TrackScanResult) {
 		return
 	}
 	detail := fmt.Sprintf("Scan added: %s (%s)", result.Media.CleanTitle, result.FullPath)
-	ctx.Database.InsertActionSimple(db.ActionSimpleInput{
+	_ = ctx.Database.InsertActionSimple(db.ActionSimpleInput{
 		FileAction: db.FileActionScanAdd, MediaID: result.MediaID,
 		Detail: detail, BatchID: ctx.BatchID,
 	})

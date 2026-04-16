@@ -15,7 +15,7 @@ import (
 )
 
 var watchExportOutput string
-var watchImportInput string
+
 
 var watchExportCmd = &cobra.Command{
 	Use:   "export",
@@ -168,7 +168,7 @@ func runWatchImport(cmd *cobra.Command, args []string) {
 		}
 
 		if e.Status == string(db.WatchStatusWatched) {
-			database.MarkWatched(e.TmdbID)
+			_ = database.MarkWatched(e.TmdbID)
 		}
 		added++
 	}

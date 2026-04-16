@@ -81,7 +81,7 @@ func undoDelete(database *db.DB, a *db.ActionRecord) error {
 	if insertErr != nil {
 		return apperror.Wrap("re-insert media from snapshot", insertErr)
 	}
-	database.InsertActionSimple(db.ActionSimpleInput{
+	_ = database.InsertActionSimple(db.ActionSimpleInput{
 		FileAction: db.FileActionRestore, MediaID: newID, Snapshot: a.MediaSnapshot,
 		Detail: fmt.Sprintf("Restored: %s (from undo of action %d)", media.Title, a.ActionHistoryId),
 	})

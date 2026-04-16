@@ -90,7 +90,7 @@ func snapshotRemovedMedia(database *db.DB, media []*db.Media, scanBatchID string
 			continue
 		}
 		detail := fmt.Sprintf("Scan removed: %s (%s)", rm.CleanTitle, rm.OriginalFilePath)
-		database.InsertActionSimple(db.ActionSimpleInput{
+		_ = database.InsertActionSimple(db.ActionSimpleInput{
 			FileAction: db.FileActionScanRemove, MediaID: rm.ID,
 			Snapshot: snapshot, Detail: detail, BatchID: scanBatchID,
 		})
@@ -129,7 +129,7 @@ func handleRescan(ctx *ScanContext, input HandleRescanInput) {
 		return
 	}
 	detail := fmt.Sprintf("Rescan updated: %s", input.EM.CleanTitle)
-	input.Database.InsertActionSimple(db.ActionSimpleInput{
+	_ = input.Database.InsertActionSimple(db.ActionSimpleInput{
 		FileAction: db.FileActionRescanUpdate, MediaID: input.EM.ID,
 		Snapshot: preSnapshot, Detail: detail, BatchID: input.BatchID,
 	})

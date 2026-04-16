@@ -125,7 +125,7 @@ func replaceGenresOnUpdate(database *db.DB, tmdbID int, genre string) {
 	if existing == nil {
 		return
 	}
-	database.ReplaceMediaGenres(existing.ID, genre)
+	_ = database.ReplaceMediaGenres(existing.ID, genre)
 }
 
 func linkGenresOnInsert(database *db.DB, mediaID int64, genre string) {
