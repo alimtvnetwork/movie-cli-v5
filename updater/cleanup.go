@@ -46,6 +46,11 @@ func Cleanup() (int, error) {
 	baseName := binaryBaseName(selfPath)
 	dirs := candidateDirs(selfPath)
 
+	fmt.Println("  Scanning directories:")
+	for _, dir := range dirs {
+		fmt.Printf("    - %s\n", dir)
+	}
+
 	for _, dir := range dirs {
 		cleaned += cleanDir(dir, baseName, selfPath)
 	}
@@ -120,7 +125,6 @@ func loadPowershellConfig() *powershellConfig {
 	}
 	return &cfg
 }
-
 
 // cleanDir removes all known leftover patterns in a single directory.
 func cleanDir(dir, baseName, selfPath string) int {
