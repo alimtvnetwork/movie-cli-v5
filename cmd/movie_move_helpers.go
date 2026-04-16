@@ -4,7 +4,6 @@
 package cmd
 
 import (
-	"github.com/alimtvnetwork/movie-cli-v4/apperror"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -16,6 +15,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/alimtvnetwork/movie-cli-v4/apperror"
 	"github.com/alimtvnetwork/movie-cli-v4/cleaner"
 	"github.com/alimtvnetwork/movie-cli-v4/db"
 	"github.com/alimtvnetwork/movie-cli-v4/errlog"
