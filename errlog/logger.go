@@ -5,7 +5,6 @@
 package errlog
 
 import (
-	"github.com/alimtvnetwork/movie-cli-v4/apperror"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -13,6 +12,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/alimtvnetwork/movie-cli-v4/apperror"
 )
 
 // Level represents the severity of a log entry.

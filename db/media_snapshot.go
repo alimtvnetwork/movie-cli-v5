@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 )
 
-// MediaToJSON serialises a Media record to JSON for ActionHistory snapshots.
+// MediaToJSON serializes a Media record to JSON for ActionHistory snapshots.
 func MediaToJSON(m *Media) (string, error) {
 	data, err := json.Marshal(m)
 	if err != nil {

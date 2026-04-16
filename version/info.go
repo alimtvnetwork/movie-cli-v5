@@ -17,9 +17,9 @@ import "fmt"
 
 // These three variables are overwritten by -ldflags at build time.
 var (
-	Version   = "v2.29.0" // semver tag  e.g. "v2.29.0"
-	Commit    = "none"       // git SHA     e.g. "abc1234"
-	BuildDate = "unknown"    // build date  e.g. "2024-06-01"
+	Version   = "v2.81.0"  // semver tag  e.g. "v2.81.0"
+	Commit    = "none"      // git SHA     e.g. "abc1234"
+	BuildDate = "unknown"   // build date  e.g. "2024-06-01"
 )
 
 // Full returns the full version string printed by `movie version`.

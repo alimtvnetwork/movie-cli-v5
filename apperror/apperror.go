@@ -1,4 +1,4 @@
-// Package apperror provides standardised error wrapping for the CLI.
+// Package apperror provides standardized error wrapping for the CLI.
 //
 // Use Wrap to attach context to an existing error (preserves the cause chain).
 // Use Wrapf when the context message needs format arguments.

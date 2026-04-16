@@ -1,11 +1,12 @@
 package updater
 
 import (
-	"github.com/alimtvnetwork/movie-cli-v4/apperror"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/alimtvnetwork/movie-cli-v4/apperror"
 )
 
 // Cleanup removes leftover temp binaries and backup files from previous updates.

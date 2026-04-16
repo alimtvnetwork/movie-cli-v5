@@ -1,12 +1,13 @@
 package updater
 
 import (
-	"github.com/alimtvnetwork/movie-cli-v4/apperror"
 	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
+
+	"github.com/alimtvnetwork/movie-cli-v4/apperror"
 )
 
 // findRepoPath locates the git repository root by checking (in order):
