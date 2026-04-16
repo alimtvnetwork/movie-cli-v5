@@ -387,116 +387,63 @@ function Resolve-Dependencies {
 # -- Pre-build validation --------------------------------------
 
 function Test-SourceFiles {
-    Write-Info "Validating source files..."
+    Write-Info "Validating source layout..."
 
+    # Required entry-point files (must exist exactly).
     $requiredFiles = @(
         "main.go",
         "go.mod",
-        "cmd/root.go",
-        "cmd/update.go",
-        "cmd/version.go",
-        "cmd/movie_scan.go",
-        "cmd/movie_scan_process.go",
-        "cmd/movie_scan_helpers.go",
-        "cmd/movie_scan_loop.go",
-        "cmd/movie_scan_collect.go",
-        "cmd/movie_scan_html.go",
-        "cmd/movie_scan_json.go",
-        "cmd/movie_scan_summary.go",
-        "cmd/movie_scan_table.go",
-        "cmd/movie_scan_watch.go",
-        "cmd/movie_ls.go",
-        "cmd/movie_ls_detail.go",
-        "cmd/movie_ls_table.go",
-        "cmd/movie_move.go",
-        "cmd/movie_move_helpers.go",
-        "cmd/movie_move_batch.go",
-        "cmd/movie_info.go",
-        "cmd/movie_info_helpers.go",
-        "cmd/movie_info_table.go",
-        "cmd/movie_search.go",
-        "cmd/movie_search_save.go",
-        "cmd/movie_search_table.go",
-        "cmd/movie_suggest.go",
-        "cmd/movie_undo.go",
-        "cmd/movie_undo_exec.go",
-        "cmd/movie_undo_handlers.go",
-        "cmd/movie_redo.go",
-        "cmd/movie_redo_exec.go",
-        "cmd/movie_redo_handlers.go",
-        "cmd/movie_history.go",
-        "cmd/movie_history_table.go",
-        "cmd/movie_popout.go",
-        "cmd/movie_rescan.go",
-        "cmd/movie_rescan_helper.go",
-        "cmd/movie_rest.go",
-        "cmd/movie_rest_handlers.go",
-        "cmd/movie_stats.go",
-        "cmd/movie_stats_table.go",
-        "cmd/movie_config.go",
-        "cmd/movie_cleanup.go",
-        "cmd/movie_duplicates.go",
-        "cmd/movie_export.go",
-        "cmd/movie_rename.go",
-        "cmd/movie_tag.go",
-        "cmd/movie_watch.go",
-        "cmd/movie_play.go",
-        "cmd/movie_db.go",
-        "cmd/movie_cd.go",
-        "cmd/movie_logs.go",
-        "cmd/movie_tmdb.go",
-        "cmd/movie_discover.go",
-        "cmd/movie_resolve.go",
-        "db/open.go",
-        "db/schema.go",
-        "db/media.go",
-        "db/media_query.go",
-        "db/history.go",
-        "db/action_history.go",
-        "db/config.go",
-        "db/tags.go",
-        "db/watchlist.go",
-        "db/errorlog.go",
-        "db/helpers.go",
-        "db/constants.go",
-        "tmdb/client.go",
-        "tmdb/http.go",
-        "tmdb/types.go",
-        "tmdb/helpers.go",
-        "db/schema_tables.go",
-        "db/schema_indexes.go",
-        "cmd/movie_suggest_helpers.go",
-        "cmd/types.go",
-        "cleaner/parse.go",
-        "apperror/apperror.go",
-        "errlog/logger.go",
-        "updater/run.go",
-        "updater/repo.go",
-        "updater/handoff.go",
-        "updater/script.go",
-        "updater/cleanup.go",
-        "updater/gitmap.go",
-        "version/info.go",
-        "templates/embed.go"
+        "go.sum"
+    )
+
+    # Required source directories — each must contain at least one .go file.
+    # We do NOT hardcode every file name because the file set changes often
+    # and a brittle list causes false "missing source files" failures.
+    $requiredDirs = @(
+        "cmd",
+        "db",
+        "tmdb",
+        "cleaner",
+        "apperror",
+        "errlog",
+        "updater",
+        "version",
+        "templates"
     )
 
     $missing = @()
+
     foreach ($file in $requiredFiles) {
         $fullPath = Join-Path $RepoRoot $file
         if (-not (Test-Path $fullPath)) {
-            $missing += $file
+            $missing += "file: $file"
         }
     }
 
+    $totalGoFiles = 0
+    foreach ($dir in $requiredDirs) {
+        $dirPath = Join-Path $RepoRoot $dir
+        if (-not (Test-Path $dirPath)) {
+            $missing += "dir: $dir/"
+            continue
+        }
+        $goFiles = @(Get-ChildItem -Path $dirPath -Filter "*.go" -File -ErrorAction SilentlyContinue)
+        if ($goFiles.Count -eq 0) {
+            $missing += "dir: $dir/ (no .go files)"
+            continue
+        }
+        $totalGoFiles += $goFiles.Count
+    }
+
     if ($missing.Count -gt 0) {
-        Write-Fail "Missing source files ($($missing.Count)):"
-        foreach ($f in $missing) {
-            Write-Host "    - $f" -ForegroundColor Red
+        Write-Fail "Source layout invalid ($($missing.Count) issue(s)):"
+        foreach ($m in $missing) {
+            Write-Host "    - $m" -ForegroundColor Red
         }
         exit 1
     }
 
-    Write-Success "All $($requiredFiles.Count) source files present"
+    Write-Success "Source layout OK ($($requiredDirs.Count) packages, $totalGoFiles .go files)"
 }
 
 # -- Build binary ----------------------------------------------
