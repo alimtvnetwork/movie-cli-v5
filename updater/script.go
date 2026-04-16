@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/alimtvnetwork/movie-cli-v5/apperror"
@@ -21,7 +22,7 @@ func executeUpdateWindows(repoPath, targetBinary string) error {
 	return runPowerShellScript(scriptPath)
 }
 
-// executeUpdateUnix runs the update via pwsh (if available) or direct commands.
+// executeUpdateUnix runs the update via pwsh.
 func executeUpdateUnix(repoPath, targetBinary string) error {
 	if !hasPwshWithRunPS1(repoPath) {
 		runPS1 := filepath.Join(repoPath, "run.ps1")
