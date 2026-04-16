@@ -25,7 +25,7 @@ type Media struct {
 	ID            int64
 	Budget        int64
 	Revenue       int64
-	FileSize      int64   `json:"file_size,omitempty"` // computed: FileSizeMb * 1024 * 1024
+	FileSize      int64 `json:"file_size,omitempty"` // computed: FileSizeMb * 1024 * 1024
 	ImdbRating    float64
 	TmdbRating    float64
 	Popularity    float64
