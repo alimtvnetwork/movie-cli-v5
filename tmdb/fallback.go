@@ -129,9 +129,5 @@ func (c *Client) lookupByIMDbID(imdbID string) []SearchResult {
 		resp.TVResults[i].MediaType = "tv"
 		out = append(out, resp.TVResults[i])
 	}
-	if len(out) > 0 {
-		// also decode raw JSON safely (json import retained for future expansion)
-		_ = json.Marshal // keep import live
-	}
 	return out
 }
