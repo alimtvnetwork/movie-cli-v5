@@ -77,6 +77,7 @@ func countByType(items []db.Media) (int, int) {
 var rescanAll bool
 var rescanLimit int
 var rescanNoCache bool
+var rescanKeepLogs bool
 
 var movieRescanCmd = &cobra.Command{
 	Use:   "rescan",
@@ -102,6 +103,8 @@ func init() {
 		"max number of entries to process (0 = unlimited)")
 	movieRescanCmd.Flags().BoolVar(&rescanNoCache, "no-cache", false,
 		"bypass the IMDb lookup cache for this run (forces fresh DuckDuckGo + /find)")
+	movieRescanCmd.Flags().BoolVar(&rescanKeepLogs, "keep-logs", false,
+		"keep the previous run's logs instead of wiping .movie-output/logs/ on start")
 }
 
 func runMovieRescan(cmd *cobra.Command, args []string) {
@@ -118,9 +121,7 @@ func runMovieRescan(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	if initErr := errlog.InitFresh("", "rescan"); initErr != nil {
-		fmt.Fprintf(os.Stderr, "⚠️  Could not init error logger: %v\n", initErr)
-	}
+	initRunLogger("", "rescan", rescanKeepLogs)
 	defer errlog.Close()
 
 	entries, err := fetchRescanEntries(database)

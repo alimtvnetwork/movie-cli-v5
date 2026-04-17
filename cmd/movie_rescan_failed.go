@@ -15,6 +15,7 @@ import (
 
 var rescanFailedLimit int
 var rescanFailedNoCache bool
+var rescanFailedKeepLogs bool
 
 var movieRescanFailedCmd = &cobra.Command{
 	Use:   "rescan-failed",
@@ -38,6 +39,8 @@ func init() {
 		"max number of entries to process (0 = unlimited)")
 	movieRescanFailedCmd.Flags().BoolVar(&rescanFailedNoCache, "no-cache", false,
 		"bypass the IMDb lookup cache for this run (forces fresh DuckDuckGo + /find)")
+	movieRescanFailedCmd.Flags().BoolVar(&rescanFailedKeepLogs, "keep-logs", false,
+		"keep the previous run's logs instead of wiping .movie-output/logs/ on start")
 }
 
 func runMovieRescanFailed(cmd *cobra.Command, args []string) {
@@ -54,9 +57,7 @@ func runMovieRescanFailed(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	if initErr := errlog.InitFresh("", "rescan-failed"); initErr != nil {
-		fmt.Fprintf(os.Stderr, "⚠️  Could not init error logger: %v\n", initErr)
-	}
+	initRunLogger("", "rescan-failed", rescanFailedKeepLogs)
 	defer errlog.Close()
 
 	entries, err := fetchFailedEntries(database)
