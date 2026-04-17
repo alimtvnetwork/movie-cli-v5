@@ -393,6 +393,7 @@ duplicateYear = regexp.MustCompile(`\b((?:19|20)\d{2})(?:\s+((?:19|20)\d{2}))+\b
 | 2026-04-16 | v2.83.1 | gofmt ×5, fieldalignment ×3 | cmd/, db/ |
 | 2026-04-16 | v2.83.2 | gofmt import order ×7 | db/, cmd/movie_resolve.go |
 | 2026-04-16 | v2.83.3 | gofmt struct tag + concat spacing | db/media.go, db/*query/cleanup |
+| 2026-04-17 | v2.111.0 | errorlint, shadow, unused, misspell ×2, SA1000, gofmt ×4, fieldalignment ×2 | 9 files |
 
 When a *new* error class appears that is not catalogued above, append it to the catalogue (don't just log it here) so it cannot recur silently.
 
@@ -424,4 +425,4 @@ If all four pass locally, CI will pass.
 
 ---
 
-*CI/CD build fixes spec — updated: 2026-04-16 — version: v2.83.3*
+*CI/CD build fixes spec — updated: 2026-04-17 — version: v2.111.0*
