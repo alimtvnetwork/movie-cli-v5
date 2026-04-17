@@ -127,15 +127,13 @@ func writeScanJSON(ctx *ScanContext, m *db.Media) {
 
 // enrichFromTMDb fetches metadata, details, and thumbnail from TMDb.
 func enrichFromTMDb(ctx *ScanContext, m *db.Media, result cleaner.Result) {
-	searchQuery := buildTMDbSearchQuery(result)
-
-	tmdbResults, tmdbErr := ctx.Client.SearchMulti(searchQuery)
+	tmdbResults, tmdbErr := ctx.Client.SearchWithFallback(result.CleanTitle, result.Year)
 	if tmdbErr != nil {
-		logTMDbSearchError(searchQuery, tmdbErr)
+		logTMDbSearchError(buildTMDbSearchQuery(result), tmdbErr)
 		return
 	}
 	if len(tmdbResults) == 0 {
-		errlog.Warn("no TMDb match for '%s' — inserted with local data only", searchQuery)
+		errlog.Warn("no TMDb match for '%s' (year %d) after fallback chain — inserted with local data only", result.CleanTitle, result.Year)
 		return
 	}
 

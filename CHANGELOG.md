@@ -2,7 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.100.0
+
+### Fixed
+- **TMDb search no longer fails on filenames padded with release tags** like `Aan Paavam Pollathathu 10bit DS4K JHS ESub - Immortal 2025`. The cleaner now strips a much larger codec/release-group/streaming-platform vocabulary (DS4K, JHS, HEVC, AVC, EAC3, DDP5.1, AMZN, DSNP, etc.), cuts at `" - ReleaseGroup"` separators when the right side is pure junk, collapses duplicate years (`2025 2025` → `2025`), and runs junk removal in two passes so tokens revealed after the first pass also get stripped.
+
+### Added
+- **`tmdb.Client.SearchWithFallback`** — three-tier search chain used by `movie scan`:
+  1. `SearchMulti(title + year)` (existing behavior)
+  2. **Progressive trim**: drop the trailing word of the title repeatedly and retry, with and without the year, until a match is found or the title is too short.
+  3. **IMDb-via-web fallback**: when TMDb still returns nothing, query DuckDuckGo HTML for `<title> <year> imdb`, extract the first `tt\d{7,10}` IMDb id, and resolve it via TMDb `/find/{imdb_id}?external_source=imdb_id`.
+- `enrichFromTMDb` now reports `(year %d) after fallback chain` in its warning so it is obvious when even the IMDb fallback failed.
+
 ## v2.99.0
+
 
 ### Fixed
 - **The update worker now calls `run.ps1` with explicit named arguments** instead of relying on a splatted hashtable, so `-DeployPath` and `-BinaryNameOverride` always bind and the update redeploys to the exact original binary path that launched `movie update`.
