@@ -54,7 +54,7 @@ func runMovieRescanFailed(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	if initErr := errlog.Init("", "rescan-failed"); initErr != nil {
+	if initErr := errlog.InitFresh("", "rescan-failed"); initErr != nil {
 		fmt.Fprintf(os.Stderr, "⚠️  Could not init error logger: %v\n", initErr)
 	}
 	defer errlog.Close()

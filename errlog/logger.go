@@ -82,6 +82,17 @@ func Init(outputDir, command string) error {
 	return nil
 }
 
+// InitFresh removes the logs directory if present, then calls Init. Used by
+// long-running commands (scan, rescan, rescan-failed) that want each run to
+// start with a clean log slate instead of appending to the previous run.
+func InitFresh(outputDir, command string) error {
+	logDir := filepath.Join(outputDir, "logs")
+	if err := os.RemoveAll(logDir); err != nil {
+		return apperror.Wrapf(err, "cannot remove log dir %s", logDir)
+	}
+	return Init(outputDir, command)
+}
+
 // SetDBWriter sets the optional database writer function.
 // This is called after the DB is opened so errlog doesn't import db.
 func SetDBWriter(fn func(Entry)) {

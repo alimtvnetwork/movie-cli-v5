@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.109.0
+
+### Changed
+- **Logs folder is wiped at the start of every `movie scan`, `movie rescan`, and `movie rescan-failed` run.** Each run now starts with a clean `.movie-output/logs/` directory instead of appending to the previous run's `error.txt`, so the file always reflects only the current run.
+- **Renamed `attachIMDbCacheUnless` → `attachImdbCacheUnless`** to follow Go MixedCaps (Imdb, not IMDb) and stay consistent with the rest of the codebase.
+
+### Added
+- **`errlog.InitFresh(outputDir, command)`** — sibling of `errlog.Init` that `os.RemoveAll`s the logs dir before recreating it. Used by the three long-running commands above; one-shot commands (`rest`, `logs`, etc.) still use `Init` so their history is preserved.
+
 ## v2.107.0
 
 ### Added

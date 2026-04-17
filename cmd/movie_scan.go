@@ -169,7 +169,7 @@ func finalizeScan(cmd *cobra.Command, ctx *ScanContext, input FinalizeScanInput)
 }
 
 func initScanLogger(database *db.DB, outputDir string) {
-	if initErr := errlog.Init(outputDir, "scan"); initErr != nil {
+	if initErr := errlog.InitFresh(outputDir, "scan"); initErr != nil {
 		fmt.Fprintf(os.Stderr, "⚠️  Could not init error logger: %v\n", initErr)
 		return
 	}
