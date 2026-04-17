@@ -48,6 +48,8 @@ func scanImdbCacheRows(rows *sql.Rows) ([]ImdbCacheEntry, error) {
 			return nil, err
 		}
 		out = append(out, e)
+	}
+	return out, rows.Err()
 }
 
 // ListImdbLookupsUnresolved returns every cached HIT row whose TmdbId is 0
@@ -65,8 +67,6 @@ func (d *DB) ListImdbLookupsUnresolved() ([]ImdbCacheEntry, error) {
 	}
 	defer rows.Close()
 	return scanImdbCacheRows(rows)
-}
-	return out, rows.Err()
 }
 
 // CountImdbLookups returns (totalRows, hitRows). missRows = total - hits.
