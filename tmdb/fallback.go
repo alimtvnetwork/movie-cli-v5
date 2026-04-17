@@ -2,7 +2,6 @@
 package tmdb
 
 import (
-	"encoding/json"
 	"io"
 	"net/http"
 	"net/url"
