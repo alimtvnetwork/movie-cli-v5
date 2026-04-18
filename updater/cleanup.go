@@ -211,10 +211,18 @@ func cleanGlob(pattern string, skipPaths []string) int {
 			continue
 		}
 		if err := os.Remove(match); err != nil {
-			if os.IsPermission(err) && strings.Contains(filepath.Base(match), "-update-") {
+			// Silently skip any handoff-worker leftover that is still locked
+			// (the running worker, or a sibling worker on a different PATH).
+			// These are swept on a later run -- they are NEVER fatal, and
+			// printing to stderr here is what produces the PowerShell
+			// "NativeCommandError" red wall the user sees.
+			if strings.Contains(filepath.Base(match), "-update-") {
 				continue
 			}
-			fmt.Fprintf(os.Stderr, "  [WARN] Could not remove %s: %v\n", filepath.Base(match), err)
+			// Route warnings to stdout so PowerShell does not wrap them in a
+			// red NativeCommandError block. The caller already redirects this
+			// stream to $null during the best-effort post-update sweep.
+			fmt.Printf("  [WARN] Could not remove %s: %v\n", filepath.Base(match), err)
 			continue
 		}
 		fmt.Printf("  Removed: %s\n", filepath.Base(match))

@@ -93,12 +93,28 @@ function Write-ErrorAndExit {
 }
 
 function Resolve-DeployTarget {
-    if (-not $TargetBinaryPath) {
+    $candidate = $TargetBinaryPath
+
+    # In update mode, when no explicit target was provided (legacy worker call),
+    # fall back to the active 'movie' on PATH so we always replace the binary
+    # the user is actually running -- not whatever powershell.json's deployPath
+    # happens to point at. This is the single fix that breaks the loop where
+    # PATH points at one drive (E:\bin-run) but deployPath points at another
+    # (D:\bin-run), leaving the active binary frozen at an old version forever.
+    if (-not $candidate -and $Update) {
+        $activeCmd = Get-Command movie -ErrorAction SilentlyContinue
+        if ($activeCmd -and $activeCmd.Source -and (Test-Path $activeCmd.Source)) {
+            $candidate = $activeCmd.Source
+            Write-Info "Update mode: no -TargetBinaryPath provided; using active PATH binary: $candidate"
+        }
+    }
+
+    if (-not $candidate) {
         return $null
     }
-    $resolvedTarget = $TargetBinaryPath
+    $resolvedTarget = $candidate
     try {
-        $resolvedTarget = (Resolve-Path -LiteralPath $TargetBinaryPath -ErrorAction Stop).Path
+        $resolvedTarget = (Resolve-Path -LiteralPath $candidate -ErrorAction Stop).Path
     } catch {
     }
     $targetParent = Split-Path -Parent $resolvedTarget
@@ -638,6 +654,8 @@ function Deploy-Binary {
     if ($deployTarget) {
         $deployPath = $deployTarget.DeployPath
         $TargetBinaryPath = $deployTarget.TargetBinaryPath
+        # Promote to script scope so the post-deploy PATH-sync guard sees it.
+        $script:TargetBinaryPath = $deployTarget.TargetBinaryPath
         Write-Info "Using target binary override: $TargetBinaryPath"
     }
     if ($DeployPath) {
@@ -922,7 +940,12 @@ if (-not $NoDeploy) {
 # PATH sync -- never do this during update mode because the active PATH binary is
 # exactly the binary that launched the handoff and may still be winding down.
 # Update mode already deploys to the authoritative target path above.
-$skipPathSync = $Update -and $TargetBinaryPath
+# In update mode we ALWAYS skip the post-deploy PATH-sync loop -- whether or not
+# -TargetBinaryPath was provided, because Resolve-DeployTarget now falls back to
+# the active PATH binary when run under -Update, so the deploy already replaced
+# the right file. The old retry/copy loop only ever caused "Access is denied"
+# warnings against a still-running parent.
+$skipPathSync = [bool]$Update
 if ($skipPathSync) {
     Write-Info "Skipping PATH sync in update mode; deployed target already matches the handed-off binary"
 }
