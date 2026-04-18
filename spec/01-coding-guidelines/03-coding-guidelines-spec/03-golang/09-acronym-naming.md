@@ -109,14 +109,16 @@ URL  → Url      JSON → Json     SQL  → Sql      HTML → Html
 XML  → Xml
 ```
 
-### 3.2 At review time
+### 3.2 At review time (CI)
 
-Run a one-liner sweep before committing Go changes:
+The lint job in `.github/workflows/ci.yml` runs an **Acronym MixedCaps guard**
+step after `golangci-lint` that fails the build on any violation. Run the
+same check locally before pushing:
 
 ```bash
 grep -rn -E '\b(IMDb|TMDb|API|HTTP|URL|JSON|SQL|HTML|XML)[A-Z]' \
   --include='*.go' . \
-  | grep -vE '\b(imdbID|tmdbID|imgURL|reqURL|posterURL)\b'
+  | grep -vE '\b(imdbID|tmdbID|imgURL|reqURL|posterURL|baseURL|apiURL|fullURL|targetURL|rawURL|nextURL|prevURL|sourceURL|destURL|webhookURL|callbackURL|redirectURL|releaseURL|downloadURL|assetURL|repoURL|cloneURL|htmlURL|avatarURL|profileURL)\b'
 ```
 
 Any non-empty output (excluding the trailing-initialism allowlist in section
