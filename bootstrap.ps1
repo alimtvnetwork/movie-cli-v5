@@ -130,8 +130,6 @@ $parsed = Get-ParsedRepoUrl -Url $RepoUrl
 
 if (-not $parsed) {
     Write-Log "[bootstrap] URL has no -v<N> suffix; installing as-is" 'Yellow'
-    $fallback = "$($RepoUrl.TrimEnd('/'))/raw/$PROBE_BRANCH/install.ps1" -replace 'github\.com', 'raw.githubusercontent.com' -replace '/raw/', '/'
-    # Simpler: use the canonical raw URL form
     $fallback = $RepoUrl.TrimEnd('/').Replace('github.com', 'raw.githubusercontent.com') + "/$PROBE_BRANCH/install.ps1"
     Invoke-DelegatedInstall -InstallUrl $fallback
     exit $LASTEXITCODE
