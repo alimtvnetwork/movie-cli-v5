@@ -45,11 +45,14 @@ type IMDbCache interface {
 }
 
 // Client interacts with the TMDb API.
+// Field order is tuned for govet fieldalignment: pointer-heavy fields first,
+// then strings (whose trailing length word is non-pointer), so the GC pointer
+// scan stops at offset 40 instead of 48 (48 pointer bytes vs 56).
 type Client struct {
+	HTTPClient  *http.Client
+	IMDbCache   IMDbCache // optional; persisted lookup cache to skip the web
 	APIKey      string
 	AccessToken string
-	IMDbCache   IMDbCache // optional; persisted lookup cache to skip the web
-	HTTPClient  *http.Client
 }
 
 // SetIMDbCache attaches a persistent cache for DuckDuckGo→IMDb lookups.
