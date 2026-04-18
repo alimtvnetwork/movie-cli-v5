@@ -1,40 +1,42 @@
+# Memory: index.md
+Updated: now
+
 # Project Memory
 
 ## Core
-Go 1.22 CLI project (NOT web). Binary: `mahin`. Module: `mahin-cli-v2`. Ignore Lovable build errors.
+Go 1.22 CLI project (NOT web). Binary: `mahin`. Ignore Lovable build errors.
 One file per command, max ~200 lines. Shared helpers in movie_info.go and movie_resolve.go.
 File naming: `01-name-of-file.md`. Keep folder file counts small.
 Plans & suggestions tracked in single files, not per-item files.
 Never modify `.release` folder. Any code change bumps at least minor version.
-ALWAYS bump version/info.go after every code change. Never forget.
+ALWAYS bump version/version.go after every code change. Never forget.
 Malaysia timezone (UTC+8) for timestamps. Milestones in `readm.txt`.
 Root spec files: lowercase (spec.md, ai-handoff.md, development-log.md). Keep README.md uppercase.
+Spec resequenced: foundation 01-06, app at 08, app-issues at 09. Issues in spec/09-app-issues/.
+Error spec flattened: spec/02-error-manage-spec/ (no nested subfolder).
 HTML JS: single API_BASE variable for all REST calls. Never repeat URL.
 Boolean names: never use negative words (un/not/no). Use positive semantic synonyms with Is/Has prefix.
-Acronyms in Go identifiers: MixedCaps only (Imdb/Tmdb/Api/Http/Url/Json/Sql) — never IMDb/TMDb/API/HTTP/URL. Trailing-initialism short locals (imdbID, tmdbID, imgURL) are an intentional exception.
 Zero nested if. Max 2 conditions per if. No else after return. Functions ≤15 lines. Files ≤300 lines. Max 3 params.
 No magic strings — use constants/enums. No fmt.Errorf — use apperror.Wrap().
-Single DB: all tables in `mahin.db`. No Split DB. NEVER name file `<pkg>/<pkg>.go`.
-Data folder at `<binary-dir>/data/`, resolved via os.Executable(). NOT cwd-relative.
-Updater: synchronous console-safe handoff (gitmap pattern). Never async Start()+exit.
-Current version: v2.23.0. Spec resequenced: foundation 01-06, app at 08, issues at 09.
+Updater rule: in update mode, deploy target = active PATH binary, NEVER powershell.json deployPath.
+Updater rule: never write expected os.Remove failures on *-update-* artifacts to stderr (PowerShell turns it into NativeCommandError).
 
 ## Memories
-- [Project overview](mem://01-project-overview) — Go CLI, command tree (21 cmds), architecture, v2.23.0
+- [Project overview](mem://01-project-overview) — Go CLI, command tree, architecture, file structure
 - [Conventions](mem://02-conventions) — Code style, naming, build, deploy, config keys
-- [Plan](mem://workflow/01-plan) — Done/pending task tracker, guideline remediation phases 3-7 next
+- [Plan](mem://workflow/01-plan) — Done/pending task tracker, prioritized backlog
 - [AI success plan](mem://workflow/01-ai-success-plan) — 7 rules for 98% AI success rate
-- [Suggestions](mem://suggestions/01-suggestions) — S01-S25 done, S26-S29 open (guideline fixes)
-- [Reliability report](mem://reports/01-reliability-risk-report) — Failure map, corrective actions
-- [No Split DB](mem://constraints/no-split-db) — All tables in single mahin.db
-- [Updater scope](mem://constraints/updater-scope) — Go updater never runs git checkout/pull/build; all git+build belong in run.ps1
-- [Installer subshell](mem://constraints/installer-subshell) — curl|bash and irm|iex run in subshells; can't mutate parent shell env, must print copy-paste hint
-- [Acronym MixedCaps](mem://constraints/acronym-mixedcaps) — All Go identifiers use Imdb/Tmdb/Api/Http/Url casing (not IMDb/TMDb/API/HTTP/URL); applied wholesale in v2.115.0
-- [Data folder location](mem://features/data-folder-location) — Binary-relative data/ with single DB
-- [Timestamp bug](mem://issues/01-timestamp-bug) — ✅ Fixed: hardcoded "now" → RFC3339
-- [Duplicate TMDb fetch](mem://issues/02-duplicate-tmdb-fetch) — ✅ Fixed: shared helpers
-- [Large files](mem://issues/03-large-files) — ✅ Fixed: split to <200 lines
-
-- [Updater async console](mem://issues/05-updater-async-console) — ✅ Fixed: sync handoff, exit code propagation
-- [Guideline violations](mem://issues/06-guideline-violations-refactoring) — ✅ Phase 1-2 done, phases 3-7 pending
-- [CI/CD build fixes playbook](mem://ci-cd/01-build-fixes-playbook) — Root cause + fix + prevention for every recurring golangci-lint error. READ before editing .go files.
+- [Suggestions](mem://suggestions/01-suggestions) — Active suggestion tracker with priority levels
+- [Reliability report](mem://reports/01-reliability-risk-report) — Failure map, corrective actions, readiness decision
+- [Guideline violations audit](mem://audit/01-guideline-violations) — Full audit: nested ifs, magic strings, oversized funcs/files, 7-phase fix plan
+- [Version bump rule](mem://preferences/version-bump) — Always bump version after every code change
+- [API base variable](mem://preferences/api-base-variable) — JS must use single API_BASE variable, never repeat URL
+- [Boolean naming](mem://constraints/boolean-no-negative-words) — IsUndone→IsReverted; never use un/not/no in boolean names
+- [Updater scope](mem://constraints/updater-scope) — Go updater never runs git/build; all git+build belongs in run.ps1
+- [Timestamp bug](mem://issues/01-timestamp-bug) — Fixed: hardcoded "now" → RFC3339
+- [Duplicate TMDb fetch](mem://issues/02-duplicate-tmdb-fetch) — Fixed: shared helpers
+- [Large files](mem://issues/03-large-files) — Fixed: split to <200 lines
+- [CI log commit loop](mem://issues/04-ci-log-commit-loop) — Constraint: CI log commits must never trigger new runs; kill feature if loops occur
+- [Updater async console](mem://issues/05-updater-async-console) — Updater output and worker handoff sequencing
+- [Updater deploy-path mismatch](mem://issues/06-updater-deploypath-mismatch) — Fixed v2.121.0: update target = PATH binary, not deployPath
+- [Updater stale-handoff full RCA](mem://issues/07-updater-stale-handoff-loop-full-rca) — Full chain: 5 bugs, why v2.118-v2.120 invisible, v2.121 root-cause + v2.122 self-replace bootstrap + v2.123 polish

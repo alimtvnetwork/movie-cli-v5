@@ -53,21 +53,17 @@ func Run(repoPathFlag string) error {
 		return err
 	}
 
-	fmt.Println("==> movie update")
-	fmt.Printf("    Active binary : %s\n", selfPath)
-	fmt.Printf("    Source repo   : %s\n", repoPath)
+	fmt.Printf("🎯 Active binary: %s\n", selfPath)
+	fmt.Printf("🔄 Starting update from %s\n", repoPath)
 
 	return launchHandoff(copyPath, repoPath, selfPath)
 }
 
 func printBootstrapInfo(repoPath string) error {
 	commit, _ := gitOutput(repoPath, "rev-parse", "--short", "HEAD")
-	fmt.Println()
-	fmt.Println("==> Bootstrapped local source repo")
-	fmt.Printf("    Path   : %s\n", repoPath)
-	fmt.Printf("    Commit : %s\n", commit)
-	fmt.Println()
-	fmt.Println("    Next   : run 'movie update' again to build and deploy")
+	fmt.Printf("\n✨ Bootstrapped local source repo in %s\n", repoPath)
+	fmt.Printf("🔁 Commit: %s\n", commit)
+	fmt.Println("\n💡 Run 'movie update' again to build and deploy")
 	return nil
 }
 
@@ -98,10 +94,9 @@ func resolveSelfPath() (string, error) {
 
 // RunWorker is the hidden update-runner entry point called from the handoff copy.
 func RunWorker(repoPath, targetBinary string) error {
-	fmt.Println("==> Update worker started")
-	fmt.Printf("    Repo   : %s\n", repoPath)
-	fmt.Printf("    Target : %s\n", targetBinary)
-	fmt.Println()
+	fmt.Println("🔧 Update worker started")
+	fmt.Printf("📂 Repo: %s\n", repoPath)
+	fmt.Printf("🎯 Target: %s\n", targetBinary)
 
 	if runtime.GOOS == "windows" {
 		return executeUpdateWindows(repoPath, targetBinary)

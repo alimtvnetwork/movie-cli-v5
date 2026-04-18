@@ -2,11 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## v2.123.0
+## v2.124.0
 
-### Changed
-- **Polished `movie update` terminal output** — consistent indent levels across the whole pipeline (updater → worker → run.ps1 → final banner): top-level phases use `==>`, sub-results use `[ OK ] / [INFO] / [WARN] / [FAIL]` tags with aligned 4/6-space indents, emoji-only status lines were replaced with ASCII-safe equivalents that render cleanly in every PowerShell host. Boxed banners switched from `===` to `---` and were re-aligned. The `Updated:` line now splits `from`/`to` onto two aligned rows so the version delta is readable at a glance.
-- **Suppressed harmless `.bak` access-denied warning during update mode** — the rename-first deploy leaves a `<binary>.bak` next to the new binary that may stay locked by the still-winding-down parent process for a few seconds. The next `movie update` (or `movie update-cleanup`) sweeps it. The previous "Could not remove backup file '...': Access to the path '...' is denied." warning was misleading — it implied a failure when nothing was actually wrong. Now silent.
+### Documentation
+- **Full failure-chain RCA published** for the v2.97.0 → v2.121.0 stale-handoff loop. Documents all 5 independent bugs (dual `bin-run` dirs, deployPath trust, stale-worker `-TargetBinaryPath` gap, PATH-sync loop attacking the live parent, stderr-as-NativeCommandError), why v2.118.0/v2.119.0/v2.120.0 fixes were invisible in production, the v2.121.0 root-cause fix, the v2.122.0 `self-replace` bootstrap, and the v2.123.0 output polish. Added as `spec/09-app-issues/08-updater-stale-handoff-loop-full-rca.md` and mirrored to `.lovable/memory/issues/07-updater-stale-handoff-loop-full-rca.md`. Issue tracker overview updated.
 
 ## v2.122.0
 
