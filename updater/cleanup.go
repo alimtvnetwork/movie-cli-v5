@@ -211,6 +211,9 @@ func cleanGlob(pattern string, skipPaths []string) int {
 			continue
 		}
 		if err := os.Remove(match); err != nil {
+			if os.IsPermission(err) && strings.Contains(filepath.Base(match), "-update-") {
+				continue
+			}
 			fmt.Fprintf(os.Stderr, "  [WARN] Could not remove %s: %v\n", filepath.Base(match), err)
 			continue
 		}

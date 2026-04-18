@@ -112,6 +112,43 @@ function Resolve-DeployTarget {
     return @{ DeployPath = $targetParent; BinaryName = $targetName; TargetBinaryPath = $resolvedTarget }
 }
 
+function Normalize-LegacyUpdateArgs {
+    if (-not $RunArgs -or $RunArgs.Count -eq 0) {
+        return
+    }
+
+    for ($i = 0; $i -lt $RunArgs.Count; $i++) {
+        $arg = "$($RunArgs[$i])"
+        switch ($arg) {
+            "-Update" {
+                $script:Update = $true
+            }
+            "-TargetBinaryPath" {
+                if ($i + 1 -lt $RunArgs.Count) {
+                    $script:TargetBinaryPath = "$($RunArgs[$i + 1])"
+                    $i++
+                }
+            }
+            "-DeployPath" {
+                if ($i + 1 -lt $RunArgs.Count) {
+                    $script:DeployPath = "$($RunArgs[$i + 1])"
+                    $i++
+                }
+            }
+            "-BinaryNameOverride" {
+                if ($i + 1 -lt $RunArgs.Count) {
+                    $script:BinaryNameOverride = "$($RunArgs[$i + 1])"
+                    $i++
+                }
+            }
+        }
+    }
+
+    if (-not $script:TargetBinaryPath -and $script:DeployPath -and $script:BinaryNameOverride) {
+        $script:TargetBinaryPath = Join-Path $script:DeployPath $script:BinaryNameOverride
+    }
+}
+
 # -- Banner ----------------------------------------------------
 
 function Show-Banner {
@@ -851,6 +888,7 @@ function Invoke-Tests {
 
 Show-Banner
 $config = Load-Config
+Normalize-LegacyUpdateArgs
 
 # Test mode -- run tests and exit
 if ($Test) {
