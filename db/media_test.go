@@ -28,7 +28,7 @@ func TestInsertAndGetMedia(t *testing.T) {
 	}
 }
 
-func TestInsertMediaAllowsMissingTMDbID(t *testing.T) {
+func TestInsertMediaAllowsMissingTmdbId(t *testing.T) {
 	d := openTestDB(t)
 
 	id1, err := d.InsertMedia(&Media{Title: "Local One", CleanTitle: "local one", Type: "movie"})

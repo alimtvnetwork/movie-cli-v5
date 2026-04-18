@@ -81,7 +81,7 @@ func runMovieScan(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	creds := resolveScanTMDbCredentials(database)
+	creds := resolveScanTmdbCredentials(database)
 	outputDir := filepath.Join(scanDir, ".movie-output")
 
 	if !scanDryRun {
@@ -106,8 +106,8 @@ func runMovieScan(cmd *cobra.Command, args []string) {
 }
 
 func createScanContext(database *db.DB, creds tmdbCredentials, outputDir string) *ScanContext {
-	tmdbClient := tmdb.NewClientWithToken(creds.APIKey, creds.Token)
-	tmdbClient.SetIMDbCache(newIMDbCacheAdapter(database))
+	tmdbClient := tmdb.NewClientWithToken(creds.ApiKey, creds.Token)
+	tmdbClient.SetImdbCache(newImdbCacheAdapter(database))
 	return &ScanContext{
 		Database:  database,
 		Client:    tmdbClient,
@@ -164,8 +164,8 @@ func finalizeScan(cmd *cobra.Command, ctx *ScanContext, input FinalizeScanInput)
 		})
 	}
 
-	tmdbClient := tmdb.NewClientWithToken(input.Creds.APIKey, input.Creds.Token)
-	tmdbClient.SetIMDbCache(newIMDbCacheAdapter(input.Database))
+	tmdbClient := tmdb.NewClientWithToken(input.Creds.ApiKey, input.Creds.Token)
+	tmdbClient.SetImdbCache(newImdbCacheAdapter(input.Database))
 	startPostScanServices(cmd, ScanServiceConfig{
 		ScanDir: input.ScanDir, OutputDir: input.OutputDir, Database: input.Database, Creds: input.Creds,
 	}, tmdbClient)

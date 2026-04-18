@@ -19,8 +19,8 @@ import (
 func attachImdbCacheUnless(client *tmdb.Client, database *db.DB, noCache bool, commandName string) {
 	if noCache {
 		fmt.Printf("⚠️  --no-cache: bypassing IMDb cache for this %s run (forcing fresh DuckDuckGo + /find).\n", commandName)
-		client.SetIMDbCache(nil)
+		client.SetImdbCache(nil)
 		return
 	}
-	client.SetIMDbCache(newIMDbCacheAdapter(database))
+	client.SetImdbCache(newImdbCacheAdapter(database))
 }

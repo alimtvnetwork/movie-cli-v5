@@ -49,7 +49,7 @@ func runMovieDiscover(cmd *cobra.Command, args []string) {
 	}
 	defer database.Close()
 
-	client := initTMDbClient(database)
+	client := initTmdbClient(database)
 	if client == nil {
 		return
 	}
@@ -105,8 +105,8 @@ func fetchAndPrintDiscover(client *tmdb.Client, genreName string, genreID int) {
 	printDiscoverResults(results, genreName, typeLabel)
 }
 
-// initTMDbClient creates a TMDb client from config or env.
-func initTMDbClient(database *db.DB) *tmdb.Client {
+// initTmdbClient creates a TMDb client from config or env.
+func initTmdbClient(database *db.DB) *tmdb.Client {
 	apiKey, cfgErr := database.GetConfig("TmdbApiKey")
 	if cfgErr != nil && cfgErr.Error() != "sql: no rows in result set" {
 		errlog.Warn("Config read error: %v", cfgErr)

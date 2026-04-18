@@ -12,17 +12,17 @@ import (
 )
 
 type tmdbCredentials struct {
-	APIKey string
+	ApiKey string
 	Token  string
 }
 
 func (c tmdbCredentials) HasAuth() bool {
-	return c.APIKey != "" || c.Token != ""
+	return c.ApiKey != "" || c.Token != ""
 }
 
-// resolveScanTMDbCredentials loads saved/env credentials or prompts before scan.
-func resolveScanTMDbCredentials(database *db.DB) tmdbCredentials {
-	creds := readTMDbCredentials(database)
+// resolveScanTmdbCredentials loads saved/env credentials or prompts before scan.
+func resolveScanTmdbCredentials(database *db.DB) tmdbCredentials {
+	creds := readTmdbCredentials(database)
 	if creds.HasAuth() {
 		return creds
 	}
@@ -34,7 +34,7 @@ func resolveScanTMDbCredentials(database *db.DB) tmdbCredentials {
 	scanner := bufio.NewScanner(os.Stdin)
 	fmt.Print("   TMDb API key: ")
 	if scanner.Scan() {
-		creds.APIKey = strings.TrimSpace(scanner.Text())
+		creds.ApiKey = strings.TrimSpace(scanner.Text())
 	}
 
 	fmt.Print("   TMDb access token: ")
@@ -43,8 +43,8 @@ func resolveScanTMDbCredentials(database *db.DB) tmdbCredentials {
 	}
 	fmt.Println()
 
-	if creds.APIKey != "" {
-		if err := database.SetConfig("TmdbApiKey", creds.APIKey); err != nil {
+	if creds.ApiKey != "" {
+		if err := database.SetConfig("TmdbApiKey", creds.ApiKey); err != nil {
 			errlog.Warn("Could not save tmdb_api_key: %v", err)
 		}
 	}
@@ -66,14 +66,14 @@ func resolveScanTMDbCredentials(database *db.DB) tmdbCredentials {
 	return creds
 }
 
-// readTMDbCredentials reads TMDb credentials from config first, then env.
-func readTMDbCredentials(database *db.DB) tmdbCredentials {
+// readTmdbCredentials reads TMDb credentials from config first, then env.
+func readTmdbCredentials(database *db.DB) tmdbCredentials {
 	creds := tmdbCredentials{
-		APIKey: strings.TrimSpace(readTMDbConfigValue(database, "TmdbApiKey")),
-		Token:  strings.TrimSpace(readTMDbConfigValue(database, "TmdbToken")),
+		ApiKey: strings.TrimSpace(readTmdbConfigValue(database, "TmdbApiKey")),
+		Token:  strings.TrimSpace(readTmdbConfigValue(database, "TmdbToken")),
 	}
-	if creds.APIKey == "" {
-		creds.APIKey = strings.TrimSpace(os.Getenv("TMDB_API_KEY"))
+	if creds.ApiKey == "" {
+		creds.ApiKey = strings.TrimSpace(os.Getenv("TMDB_API_KEY"))
 	}
 	if creds.Token == "" {
 		creds.Token = strings.TrimSpace(os.Getenv("TMDB_TOKEN"))
@@ -81,7 +81,7 @@ func readTMDbCredentials(database *db.DB) tmdbCredentials {
 	return creds
 }
 
-func readTMDbConfigValue(database *db.DB, key string) string {
+func readTmdbConfigValue(database *db.DB, key string) string {
 	val, err := database.GetConfig(key)
 	if err != nil {
 		if err.Error() != "sql: no rows in result set" {

@@ -35,7 +35,7 @@ func (c *Client) SearchWithFallback(title string, year int) ([]SearchResult, err
 		return results, nil
 	}
 
-	if results := c.tryIMDbViaWeb(title, year); len(results) > 0 {
+	if results := c.tryImdbViaWeb(title, year); len(results) > 0 {
 		return results, nil
 	}
 
@@ -69,16 +69,16 @@ func (c *Client) tryProgressiveTrim(title string, year int) []SearchResult {
 	return nil
 }
 
-var imdbIDPattern = regexp.MustCompile(`tt\d{7,10}`)
+var imdbIdPattern = regexp.MustCompile(`tt\d{7,10}`)
 
-// tryIMDbViaWeb resolves a title via the IMDb-cache-aware fallback chain.
+// tryImdbViaWeb resolves a title via the IMDb-cache-aware fallback chain.
 // On a fully warm cache hit it returns a synthetic SearchResult containing
 // just the TMDb id + media type — the caller is expected to enrich it via
 // the /movie/{id} or /tv/{id} detail endpoints. On a partial hit (IMDb id
 // cached but TmdbId not yet resolved) it calls TMDb /find and back-fills the
 // cache so the next run is fully warm.
-func (c *Client) tryIMDbViaWeb(title string, year int) []SearchResult {
-	imdbID, cachedTmdbID, cachedMediaType, found := c.lookupIMDbCache(title, year)
+func (c *Client) tryImdbViaWeb(title string, year int) []SearchResult {
+	imdbID, cachedTmdbID, cachedMediaType, found := c.lookupImdbCache(title, year)
 	if found && imdbID == "" {
 		return nil // cached miss — do not hit the web
 	}
@@ -88,43 +88,43 @@ func (c *Client) tryIMDbViaWeb(title string, year int) []SearchResult {
 	}
 
 	if imdbID == "" {
-		imdbID = c.fetchIMDbIDFromDuckDuckGo(title, year)
+		imdbID = c.fetchImdbIdFromDuckDuckGo(title, year)
 		if imdbID == "" {
-			c.storeIMDbCache(title, year, "", 0, "")
+			c.storeImdbCache(title, year, "", 0, "")
 			return nil
 		}
 	}
 
-	results := c.lookupByIMDbID(imdbID)
+	results := c.lookupByImdbId(imdbID)
 	if len(results) == 0 {
 		// Store IMDb id but no TmdbId so a future /find retry can succeed.
-		c.storeIMDbCache(title, year, imdbID, 0, "")
+		c.storeImdbCache(title, year, imdbID, 0, "")
 		return nil
 	}
 
 	best := results[0]
-	c.storeIMDbCache(title, year, imdbID, best.ID, best.MediaType)
+	c.storeImdbCache(title, year, imdbID, best.ID, best.MediaType)
 	return results
 }
 
-func (c *Client) lookupIMDbCache(title string, year int) (string, int, string, bool) {
-	if c.IMDbCache == nil {
+func (c *Client) lookupImdbCache(title string, year int) (string, int, string, bool) {
+	if c.ImdbCache == nil {
 		return "", 0, "", false
 	}
-	imdbID, tmdbID, mediaType, _, found := c.IMDbCache.Look(title, year)
+	imdbID, tmdbID, mediaType, _, found := c.ImdbCache.Look(title, year)
 	return imdbID, tmdbID, mediaType, found
 }
 
-func (c *Client) storeIMDbCache(title string, year int, imdbID string, tmdbID int, mediaType string) {
-	if c.IMDbCache == nil {
+func (c *Client) storeImdbCache(title string, year int, imdbID string, tmdbID int, mediaType string) {
+	if c.ImdbCache == nil {
 		return
 	}
-	_ = c.IMDbCache.Store(title, year, imdbID, tmdbID, mediaType)
+	_ = c.ImdbCache.Store(title, year, imdbID, tmdbID, mediaType)
 }
 
-// fetchIMDbIDFromDuckDuckGo performs the actual HTTP scrape. Always hits the
-// network; callers should consult the cache via tryIMDbViaWeb instead.
-func (c *Client) fetchIMDbIDFromDuckDuckGo(title string, year int) string {
+// fetchImdbIdFromDuckDuckGo performs the actual HTTP scrape. Always hits the
+// network; callers should consult the cache via tryImdbViaWeb instead.
+func (c *Client) fetchImdbIdFromDuckDuckGo(title string, year int) string {
 	query := title + " imdb"
 	if year > 0 {
 		query = title + " " + strconv.Itoa(year) + " imdb"
@@ -149,18 +149,18 @@ func (c *Client) fetchIMDbIDFromDuckDuckGo(title string, year int) string {
 	if readErr != nil {
 		return ""
 	}
-	return imdbIDPattern.FindString(string(body))
+	return imdbIdPattern.FindString(string(body))
 }
 
-// LookupByIMDbID is the exported wrapper around the TMDb /find endpoint
+// LookupByImdbId is the exported wrapper around the TMDb /find endpoint
 // (external_source=imdb_id). Returns the same shape as a search result so
 // callers can treat it identically. Useful for cache backfill tools that
 // already have an IMDb id and only need its TMDb counterpart.
-func (c *Client) LookupByIMDbID(imdbID string) []SearchResult {
-	return c.lookupByIMDbID(imdbID)
+func (c *Client) LookupByImdbId(imdbID string) []SearchResult {
+	return c.lookupByImdbId(imdbID)
 }
 
-func (c *Client) lookupByIMDbID(imdbID string) []SearchResult {
+func (c *Client) lookupByImdbId(imdbID string) []SearchResult {
 	if !c.HasAuth() {
 		return nil
 	}

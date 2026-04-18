@@ -60,7 +60,7 @@ func runCacheImdbBackfill(cmd *cobra.Command, args []string) {
 	}
 	defer database.Close()
 
-	creds := readTMDbCredentials(database)
+	creds := readTmdbCredentials(database)
 	if !creds.HasAuth() {
 		errlog.Error("TMDb is not configured. Run: movie config set tmdb_api_key YOUR_KEY")
 		return
@@ -79,7 +79,7 @@ func runCacheImdbBackfill(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	client := tmdb.NewClientWithToken(creds.APIKey, creds.Token)
+	client := tmdb.NewClientWithToken(creds.ApiKey, creds.Token)
 	stats := backfillCacheRows(database, client, rows)
 	printBackfillSummary(stats, len(rows))
 }
@@ -115,7 +115,7 @@ func backfillCacheRows(database *db.DB, client *tmdb.Client, rows []db.ImdbCache
 
 func processBackfillRow(database *db.DB, client *tmdb.Client, row db.ImdbCacheEntry,
 	idx, total int, stats *backfillStats) {
-	results := client.LookupByIMDbID(row.ImdbID)
+	results := client.LookupByImdbId(row.ImdbID)
 	if len(results) == 0 {
 		fmt.Printf("  [%d/%d] ❌ %s (%d) — IMDb %s did not resolve via /find\n",
 			idx, total, row.CleanTitle, row.Year, row.ImdbID)

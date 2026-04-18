@@ -15,8 +15,8 @@ func (c *Client) buildURL(path string, params url.Values) string {
 	if params == nil {
 		params = url.Values{}
 	}
-	if c.AccessToken == "" && c.APIKey != "" {
-		params.Set("api_key", c.APIKey)
+	if c.AccessToken == "" && c.ApiKey != "" {
+		params.Set("api_key", c.ApiKey)
 	}
 	encoded := params.Encode()
 	if encoded == "" {
@@ -56,7 +56,7 @@ func (c *Client) doGet(reqURL string, target interface{}, attempt int) error {
 	}
 	req.Header.Set("Accept", "application/json")
 
-	resp, err := c.HTTPClient.Do(req)
+	resp, err := c.HttpClient.Do(req)
 	if err != nil {
 		return classifyHTTPError(err)
 	}

@@ -42,7 +42,7 @@ func runMovieSearch(cmd *cobra.Command, args []string) {
 	}
 	defer database.Close()
 
-	client := resolveSearchTMDbClient(database)
+	client := resolveSearchTmdbClient(database)
 	if client == nil {
 		return
 	}
@@ -69,7 +69,7 @@ func runMovieSearch(cmd *cobra.Command, args []string) {
 	saveSearchResult(client, database, *selected)
 }
 
-func resolveSearchTMDbClient(database *db.DB) *tmdb.Client {
+func resolveSearchTmdbClient(database *db.DB) *tmdb.Client {
 	apiKey, cfgErr := database.GetConfig("TmdbApiKey")
 	if cfgErr != nil && cfgErr.Error() != "sql: no rows in result set" {
 		errlog.Warn("Config read error: %v", cfgErr)

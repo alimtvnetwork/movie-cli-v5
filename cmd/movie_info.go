@@ -84,7 +84,7 @@ func displayMediaInfo(m *db.Media, source string) {
 func fetchAndStoreFromTMDb(database *db.DB, query string) *db.Media {
 	fmt.Printf("🔎 Not found locally. Searching TMDb for: %s\n\n", query)
 
-	client := resolveInfoTMDbClient(database)
+	client := resolveInfoTmdbClient(database)
 	if client == nil {
 		return nil
 	}
@@ -116,7 +116,7 @@ func fetchAndStoreFromTMDb(database *db.DB, query string) *db.Media {
 	return m
 }
 
-func resolveInfoTMDbClient(database *db.DB) *tmdb.Client {
+func resolveInfoTmdbClient(database *db.DB) *tmdb.Client {
 	apiKey, cfgErr := database.GetConfig("TmdbApiKey")
 	if cfgErr != nil && cfgErr.Error() != "sql: no rows in result set" {
 		errlog.Warn("Config read error: %v", cfgErr)

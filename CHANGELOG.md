@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.115.0
+
+### Changed (BREAKING — internal API rename)
+- **Acronym identifiers normalized to MixedCaps across all Go code.** Per the project's "Imdb not IMDb" convention (already applied to `attachImdbCacheUnless` in v2.107.0), every remaining acronym-cased identifier was renamed:
+  - `tmdb.Client.HTTPClient` → `HttpClient`
+  - `tmdb.Client.IMDbCache` → `ImdbCache`
+  - `tmdb.Client.APIKey` → `ApiKey`
+  - `tmdb.IMDbCache` (interface) → `tmdb.ImdbCache`
+  - `tmdb.Client.SetIMDbCache` → `SetImdbCache`
+  - `tmdb.Client.LookupByIMDbID` → `LookupByImdbId`
+  - `tmdb.lookupByIMDbID` / `fetchIMDbIDFromDuckDuckGo` / `lookupIMDbCache` / `storeIMDbCache` / `tryIMDbViaWeb` / `imdbIDPattern` → `Imdb`/`Id` casing.
+  - `cmd.tmdbCredentials.APIKey` → `ApiKey`
+  - `cmd.initTMDbClient` / `resolveInfoTMDbClient` / `resolveSearchTMDbClient` / `resolveScanTMDbCredentials` / `readTMDbCredentials` / `readTMDbConfigValue` → `Tmdb` casing.
+  - `cmd.newIMDbCacheAdapter` → `newImdbCacheAdapter`.
+  - `db.TestInsertMediaAllowsMissingTMDbID` → `TestInsertMediaAllowsMissingTmdbId`.
+- 17 files touched in a single sed sweep. No behaviour changes — pure rename. Local variables that follow Go's *trailing initialism* convention (`imdbID`, `tmdbID`, `imgURL`, `reqURL`) and database column names (`ImdbId`, `TmdbId`, already correctly cased) were intentionally left alone.
+
 ## v2.114.0
 
 ### Fixed

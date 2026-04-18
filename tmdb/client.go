@@ -26,7 +26,7 @@ var (
 	ErrTimeout      = errors.New("TMDb request timed out")
 )
 
-// IMDbCache caches DuckDuckGo→IMDb id lookups (and the resolved TMDb id +
+// ImdbCache caches DuckDuckGo→IMDb id lookups (and the resolved TMDb id +
 // media type) for the search fallback chain. It is optional; when nil the
 // fallback always hits the web AND TMDb /find.
 //
@@ -39,7 +39,7 @@ var (
 //
 // Store records a result. Pass tmdbID=0 / mediaType="" when only the IMDb id
 // is known. Pass empty imdbID to record a miss.
-type IMDbCache interface {
+type ImdbCache interface {
 	Look(cleanTitle string, year int) (imdbID string, tmdbID int, mediaType string, isHit, found bool)
 	Store(cleanTitle string, year int, imdbID string, tmdbID int, mediaType string) error
 }
@@ -49,16 +49,16 @@ type IMDbCache interface {
 // then strings (whose trailing length word is non-pointer), so the GC pointer
 // scan stops at offset 40 instead of 48 (48 pointer bytes vs 56).
 type Client struct {
-	HTTPClient  *http.Client
-	IMDbCache   IMDbCache // optional; persisted lookup cache to skip the web
-	APIKey      string
+	HttpClient  *http.Client
+	ImdbCache   ImdbCache // optional; persisted lookup cache to skip the web
+	ApiKey      string
 	AccessToken string
 }
 
-// SetIMDbCache attaches a persistent cache for DuckDuckGo→IMDb lookups.
+// SetImdbCache attaches a persistent cache for DuckDuckGo→IMDb lookups.
 // Safe to call with nil to detach.
-func (c *Client) SetIMDbCache(cache IMDbCache) {
-	c.IMDbCache = cache
+func (c *Client) SetImdbCache(cache ImdbCache) {
+	c.ImdbCache = cache
 }
 
 // NewClient creates a new TMDb client from an API key or env vars.
@@ -75,9 +75,9 @@ func NewClientWithToken(apiKey, accessToken string) *Client {
 		accessToken = os.Getenv("TMDB_TOKEN")
 	}
 	return &Client{
-		APIKey:      apiKey,
+		ApiKey:      apiKey,
 		AccessToken: accessToken,
-		HTTPClient: &http.Client{
+		HttpClient: &http.Client{
 			Timeout: 15 * time.Second,
 		},
 	}
@@ -85,7 +85,7 @@ func NewClientWithToken(apiKey, accessToken string) *Client {
 
 // HasAuth returns true if the client has either an API key or access token.
 func (c *Client) HasAuth() bool {
-	return c.APIKey != "" || c.AccessToken != ""
+	return c.ApiKey != "" || c.AccessToken != ""
 }
 
 // SearchMulti searches for movies and TV shows.
@@ -184,7 +184,7 @@ func (c *Client) DownloadPoster(posterPath, dst string) error {
 	}
 
 	imgURL := imageBaseURL + posterPath
-	resp, err := c.HTTPClient.Get(imgURL)
+	resp, err := c.HttpClient.Get(imgURL)
 	if err != nil {
 		if IsNetworkError(err) {
 			return ErrNetworkError

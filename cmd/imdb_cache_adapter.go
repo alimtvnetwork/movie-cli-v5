@@ -1,10 +1,10 @@
-// imdb_cache_adapter.go — adapts *db.DB to the tmdb.IMDbCache interface.
+// imdb_cache_adapter.go — adapts *db.DB to the tmdb.ImdbCache interface.
 //
 // Lives in cmd/ so the db package stays independent of tmdb and vice-versa.
 // Wire it up at every TMDb client construction site that has a *db.DB in scope:
 //
 //	client := tmdb.NewClientWithToken(...)
-//	client.SetIMDbCache(newIMDbCacheAdapter(database))
+//	client.SetImdbCache(newImdbCacheAdapter(database))
 package cmd
 
 import (
@@ -12,12 +12,12 @@ import (
 	"github.com/alimtvnetwork/movie-cli-v5/errlog"
 )
 
-// imdbCacheAdapter wraps *db.DB so it satisfies tmdb.IMDbCache.
+// imdbCacheAdapter wraps *db.DB so it satisfies tmdb.ImdbCache.
 type imdbCacheAdapter struct {
 	database *db.DB
 }
 
-func newIMDbCacheAdapter(database *db.DB) *imdbCacheAdapter {
+func newImdbCacheAdapter(database *db.DB) *imdbCacheAdapter {
 	if database == nil {
 		return nil
 	}

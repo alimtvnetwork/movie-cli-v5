@@ -51,7 +51,7 @@ func runMovieRescanFailed(cmd *cobra.Command, args []string) {
 	}
 	defer database.Close()
 
-	creds := resolveScanTMDbCredentials(database)
+	creds := resolveScanTmdbCredentials(database)
 	if !creds.HasAuth() {
 		fmt.Fprintln(os.Stderr, "❌ No TMDb credentials configured. Run: movie config set tmdb_api_key YOUR_KEY")
 		return
@@ -71,7 +71,7 @@ func runMovieRescanFailed(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	client := tmdb.NewClientWithToken(creds.APIKey, creds.Token)
+	client := tmdb.NewClientWithToken(creds.ApiKey, creds.Token)
 	attachImdbCacheUnless(client, database, rescanFailedNoCache, "rescan-failed")
 	updated, failed := processRescanEntries(database, client, entries)
 	printRescanFailedResult(updated, failed, len(entries))

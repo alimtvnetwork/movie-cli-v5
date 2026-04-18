@@ -16,8 +16,8 @@ var scanWatchInterval int
 // runWatchLoop polls the scan directory for new video files at a fixed interval.
 func runWatchLoop(cfg ScanServiceConfig) {
 	interval := time.Duration(scanWatchInterval) * time.Second
-	watchClient := tmdb.NewClientWithToken(cfg.Creds.APIKey, cfg.Creds.Token)
-	watchClient.SetIMDbCache(newIMDbCacheAdapter(cfg.Database))
+	watchClient := tmdb.NewClientWithToken(cfg.Creds.ApiKey, cfg.Creds.Token)
+	watchClient.SetImdbCache(newImdbCacheAdapter(cfg.Database))
 	ws := WatchState{
 		Client:  watchClient,
 		HasTMDb: cfg.Creds.HasAuth(),
