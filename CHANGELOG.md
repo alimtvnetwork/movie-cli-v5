@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.116.0
+
+### Added
+- **CI guard for acronym MixedCaps convention.** New step in `.github/workflows/ci.yml` (lint job) greps every `*.go` file for the forbidden pattern `\b(IMDb|TMDb|API|HTTP|URL|JSON|SQL|HTML|XML)[A-Z]`. Trailing-initialism short locals (`imdbID`, `tmdbID`, `*URL`) are allowlisted per spec section 2.1. On match the step fails the build with a descriptive `::error` pointing at the spec.
+
+### Changed
+- **JSON acronyms normalized** in 7 files: `JSONItems` → `JsonItems`, `JSONSubDir` → `JsonSubDir`, `printScanJSON` → `printScanJson`, `UseJSON`/`useJSON` → `UseJson`/`useJson`, `scanJSONItem` → `scanJsonItem`, `buildMediaJSONItem` → `buildMediaJsonItem`. Required to satisfy the new CI guard.
+
+### Docs
+- **spec/12-ci-cd-pipeline/01-ci-pipeline.md** — documented the acronym guard step alongside `golangci-lint`.
+
 ## v2.115.0
 
 ### Changed (BREAKING — internal API rename)

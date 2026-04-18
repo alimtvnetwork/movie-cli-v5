@@ -107,7 +107,7 @@ The cache is written by the `test-summary` job on success:
 
 ## Job: Lint
 
-Runs `go vet ./...` and `golangci-lint` (pinned to `v1.64.8`, 5-minute timeout).
+Runs `go vet ./...`, `golangci-lint` (pinned to `v1.64.8`, 5-minute timeout), and an **acronym MixedCaps guard** that enforces [`spec/01-coding-guidelines/03-coding-guidelines-spec/03-golang/09-acronym-naming.md`](../01-coding-guidelines/03-coding-guidelines-spec/03-golang/09-acronym-naming.md).
 
 ```yaml
 - name: Go vet
@@ -118,7 +118,23 @@ Runs `go vet ./...` and `golangci-lint` (pinned to `v1.64.8`, 5-minute timeout).
   with:
     version: v1.64.8
     args: --timeout=5m
+
+- name: Acronym MixedCaps guard
+  run: |
+    ALLOWLIST='\b(imdbID|tmdbID|imgURL|reqURL|posterURL|baseURL|apiURL|fullURL|targetURL|rawURL|nextURL|prevURL|sourceURL|destURL|webhookURL|callbackURL|redirectURL|releaseURL|downloadURL|assetURL|repoURL|cloneURL|htmlURL|avatarURL|profileURL)\b'
+    PATTERN='\b(IMDb|TMDb|API|HTTP|URL|JSON|SQL|HTML|XML)[A-Z]'
+    violations=$(grep -rn -E "$PATTERN" --include='*.go' . | grep -vE "$ALLOWLIST" || true)
+    if [ -n "$violations" ]; then
+      echo "::error::Acronym MixedCaps violations found"
+      echo "$violations"
+      exit 1
+    fi
 ```
+
+**Why a separate guard, not a `golangci-lint` rule?** No off-the-shelf linter
+encodes the project's exact "Imdb not IMDb" preference *with* the
+trailing-initialism allowlist. A 5-line grep is faster, dependency-free, and
+self-documenting.
 
 ---
 
