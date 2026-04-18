@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.117.1
+
+### Fixed
+- **`updater/repo.go`: `normalizeRepoPath` quote stripping** — `TestNormalizeRepoPathTrimsQuotes` failed because `strings.Trim(raw, "\"'")` was applied **before** `TrimSpace`. Input `  "/tmp/x"  ` had the outer spaces protecting the quotes from being stripped, so the result still contained `"`. Reordered to: TrimSpace → Trim quotes → TrimSpace again. Quotes are now stripped from both bare and space-padded paste forms.
+
 ## v2.117.0
 
 ### Added
