@@ -7,14 +7,14 @@ on:
     tags:
       - "v*"
 
-## Concurrency is keyed on the resolved version (not github.ref) so that a
-## release/vX.Y.Z branch push and a vX.Y.Z tag push CANNOT race each other.
-## Both refs map to the same release; the second run waits for the first and
-## then either uploads missing assets or fails fast — it never partially
+## Concurrency is keyed on the normalized version (strip "release/" prefix)
+## so a release/vX.Y.Z branch push and a vX.Y.Z tag push CANNOT race each
+## other. Both map to the same release; the second run waits for the first
+## then either uploads missing assets or no-ops — it NEVER partially
 ## overwrites a complete release.
 ## See: spec/12-ci-cd-pipeline/05-ci-cd-issues/07-release-dual-trigger-race.md
 concurrency:
-  group: release-version-${{ github.ref_name }}
+  group: release-version-${{ github.ref_name == github.ref_name && (startsWith(github.ref, 'refs/heads/release/') && format('{0}', github.ref_name) || github.ref_name) }}
   cancel-in-progress: false
 
 permissions:
