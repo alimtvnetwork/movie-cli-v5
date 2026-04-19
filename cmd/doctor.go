@@ -29,7 +29,7 @@ import (
 
 var (
 	doctorFix  bool
-	doctorJSON bool
+	doctorJson bool
 )
 
 var doctorCmd = &cobra.Command{
@@ -58,8 +58,8 @@ func runDoctor(cmd *cobra.Command, args []string) {
 		fmt.Fprintf(os.Stderr, "doctor: %v\n", err)
 		os.Exit(1)
 	}
-	if doctorJSON {
-		emitJSON(report)
+	if doctorJson {
+		emitJson(report)
 		return
 	}
 	report.Print()
@@ -73,8 +73,8 @@ func runDoctor(cmd *cobra.Command, args []string) {
 	rerunDiagnose()
 }
 
-func emitJSON(report *doctor.Report) {
-	if err := report.PrintJSON(); err != nil {
+func emitJson(report *doctor.Report) {
+	if err := report.PrintJson(); err != nil {
 		fmt.Fprintf(os.Stderr, "doctor --json: %v\n", err)
 		os.Exit(1)
 	}
@@ -105,5 +105,5 @@ func rerunDiagnose() {
 
 func init() {
 	doctorCmd.Flags().BoolVar(&doctorFix, "fix", false, "Auto-repair fixable findings (self-replace, sweep workers, print PATH instructions)")
-	doctorCmd.Flags().BoolVar(&doctorJSON, "json", false, "Emit report as JSON (schema: movie-doctor/v1) for scripting/CI")
+	doctorCmd.Flags().BoolVar(&doctorJson, "json", false, "Emit report as JSON (schema: movie-doctor/v1) for scripting/CI")
 }
