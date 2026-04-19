@@ -24,6 +24,7 @@ American English ONLY in code/comments/CHANGELOG/spec — misspell uses US local
 Acronym MixedCaps: Json/Imdb/Tmdb/Api/Http/Url/Sql/Html/Xml in Go identifiers — NEVER JSON/IMDb/TMDb/API/HTTP/URL/SQL/HTML/XML. Project rule overrides Effective Go. Bare 2-letter `ID` and trailing locals (`imdbID`, `tmdbID`, `imgURL`) exempted.
 CI lint failures: every recurring lint error is logged in spec/12-ci-cd-pipeline/05-ci-cd-issues/ — read before fixing similar errors.
 Release workflow MUST verify all 6 archives present before upload (see spec/12-ci-cd-pipeline/05-ci-cd-issues/06). Never publish partial releases.
+Release workflow triggers ONLY on `release/**` branches — NEVER also on `v*` tags. softprops/action-gh-release CREATES the tag, so a tag trigger fires a 2nd parallel run that races and clobbers the release (caused v2.97.0 partial). See spec issue 07.
 
 
 ## Memories
