@@ -26,15 +26,15 @@ _Scan folders, clean filenames, fetch TMDb metadata, organize files, and track y
 
 </div>
 
-### Install
+### Install on Windows (PowerShell)
 
-```
-# Windows (PowerShell)
+```powershell
 irm https://github.com/alimtvnetwork/movie-cli-v5/releases/latest/download/install.ps1 | iex
 ```
 
-```
-# Linux / macOS
+### Install on Linux / macOS
+
+```bash
 curl -fsSL https://github.com/alimtvnetwork/movie-cli-v5/releases/latest/download/install.sh | bash
 ```
 

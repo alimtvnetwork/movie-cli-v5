@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.128.7
+
+### Changed
+- **README Quick Start install blocks** — moved OS labels out of the code blocks (no more `# Windows (PowerShell)` / `# Linux / macOS` comments inside copyable snippets) and into proper `###` section headers. Each install command is now a clean one-liner that copy-pastes without a leading comment.
+
 ## v2.128.6
 
 ### Added
