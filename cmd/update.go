@@ -11,6 +11,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/alimtvnetwork/movie-cli-v5/doctor"
 	"github.com/alimtvnetwork/movie-cli-v5/updater"
 )
 
@@ -30,8 +31,45 @@ If no local repo is found, it clones a fresh copy next to the binary.
 Run 'movie update' again after bootstrap to build.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		repoPath, _ := cmd.Flags().GetString("repo-path")
-		exitOnUpdateError("Update failed", updater.Run(repoPath))
+		runUpdateWithDoctor(repoPath)
 	},
+}
+
+// runUpdateWithDoctor runs preflight diagnose, the update, then auto-fix
+// when the preflight reported a fixable mismatch (path/version drift).
+func runUpdateWithDoctor(repoPath string) {
+	pre := runPreflight()
+	exitOnUpdateError("Update failed", updater.Run(repoPath))
+	if pre == nil || !pre.HasFixable() {
+		return
+	}
+	autoFixPostUpdate()
+}
+
+func runPreflight() *doctor.Report {
+	report, err := doctor.Preflight()
+	if err != nil {
+		fmt.Printf("⚠ Preflight diagnose skipped: %v\n", err)
+		return nil
+	}
+	return report
+}
+
+func autoFixPostUpdate() {
+	fmt.Println()
+	fmt.Println("==> Auto-running `movie doctor --fix` (preflight detected fixable issues)")
+	report, err := doctor.Diagnose()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "auto-fix: diagnose failed: %v\n", err)
+		return
+	}
+	if !report.HasFixable() {
+		fmt.Println("  Post-update state is already clean — nothing to fix.")
+		return
+	}
+	if _, err := report.Fix(); err != nil {
+		fmt.Fprintf(os.Stderr, "auto-fix: %v\n", err)
+	}
 }
 
 var updateRunnerCmd = &cobra.Command{

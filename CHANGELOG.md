@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.128.0
+
+### Added
+- **`movie update` now auto-runs `movie doctor --fix` when preflight detected a fixable mismatch.** After a successful update, if the up-front preflight pass found a fixable issue (PATH/deploy mismatch, version drift, stale workers), the updater immediately re-diagnoses and runs the standard fix pipeline — calling `self-replace` automatically so users no longer have to bootstrap manually after a stuck-handoff scenario. If the post-update state is already clean (the update happened to land on the right binary), the auto-fix is skipped with a one-line note.
+
+### Fixed
+- **Removed `updater → doctor` import** introduced in v2.126.0 that would have caused a compile-time import cycle (`doctor` already imports `updater` for `SelfReplace`). Preflight orchestration moved to `cmd/update.go`, which already sits above both packages. v2.126.0/v2.127.0 functionality is preserved; only the wiring layer changed.
+
 ## v2.127.0
 
 ### Added

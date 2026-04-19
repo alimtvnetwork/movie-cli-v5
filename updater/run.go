@@ -16,7 +16,6 @@ import (
 	"strings"
 
 	"github.com/alimtvnetwork/movie-cli-v5/apperror"
-	"github.com/alimtvnetwork/movie-cli-v5/doctor"
 )
 
 // repoURL is the canonical GitHub URL used when no local repo exists.
@@ -38,10 +37,6 @@ func Run(repoPathFlag string) error {
 
 	if bootstrapped {
 		return printBootstrapInfo(repoPath)
-	}
-
-	if _, doctorErr := doctor.Preflight(); doctorErr != nil {
-		fmt.Printf("⚠ Preflight diagnose skipped: %v\n", doctorErr)
 	}
 
 	if prepErr := preflightRepo(repoPath); prepErr != nil {
