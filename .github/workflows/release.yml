@@ -174,8 +174,25 @@ jobs:
                   Invoke-WebRequest -Uri $checksumUrl -OutFile $checksumPath -UseBasicParsing
               }
               catch {
-                  Write-Err "Download failed: $_"
+                  $statusCode = $null
+                  if ($_.Exception.Response) { $statusCode = [int]$_.Exception.Response.StatusCode }
                   Remove-Item $tmpDir -Recurse -Force -ErrorAction SilentlyContinue
+                  if ($statusCode -eq 404) {
+                      Write-Err "Download failed: Not Found (HTTP 404)"
+                      Write-Err "  $assetUrl"
+                      Write-Host ""
+                      Write-Host "  This release is missing the Windows archive for your architecture." -ForegroundColor Yellow
+                      Write-Host "  This is a publisher-side issue (the release was uploaded incomplete)." -ForegroundColor Yellow
+                      Write-Host ""
+                      Write-Host "  Workarounds:" -ForegroundColor Cyan
+                      Write-Host "    1. Try a different release tag:" -ForegroundColor Gray
+                      Write-Host "       https://github.com/$Repo/releases" -ForegroundColor White
+                      Write-Host "    2. Build from source:" -ForegroundColor Gray
+                      Write-Host "       git clone https://github.com/$Repo.git; cd $($Repo.Split('/')[-1]); ./run.ps1" -ForegroundColor White
+                      Write-Host ""
+                  } else {
+                      Write-Err "Download failed: $_"
+                  }
                   exit 1
               }
 
