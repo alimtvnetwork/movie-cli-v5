@@ -26,3 +26,5 @@ Every file follows this structure:
 | 03 | gofmt — doc-comment list indent (3-space) | `gofmt` | v2.128.1 | v2.128.1 |
 | 04 | govet fieldalignment | `govet` | v2.128.1 | v2.128.1, v2.128.2 |
 | 05 | acronym MixedCaps (project-specific) | custom guard (see `spec/01-coding-guidelines/.../09-acronym-naming.md`) | v2.128.3 | v2.128.3 |
+| 06 | release published with missing archives (HTTP 404 in installer) | release.yml (no asset-presence guard) | v2.97.0 | v2.128.4 |
+| 07 | release dual-trigger race — branch + tag both fire, second run clobbers release | release.yml (`on.push.tags` + `on.push.branches` for self-tagging publish) | v2.97.0 | v2.128.5 |
