@@ -1,12 +1,12 @@
-// diagnose.go — diagnostic engine for `movie doctor`.
+// Package doctor provides the diagnostic engine for `movie doctor`.
 //
 // Surfaces the exact failure modes documented in
 // spec/09-app-issues/08-updater-stale-handoff-loop-full-rca.md:
 //
-//   1. Active PATH binary differs from powershell.json deployPath
-//   2. Deploy directory is missing from $PATH entirely
-//   3. Stale *-update-* handoff workers left on disk
-//   4. Active binary version is older than the freshly built one
+//  1. Active PATH binary differs from powershell.json deployPath
+//  2. Deploy directory is missing from $PATH entirely
+//  3. Stale *-update-* handoff workers left on disk
+//  4. Active binary version is older than the freshly built one
 //
 // Each Check returns a Finding so the report and the --fix path can act on
 // them uniformly.

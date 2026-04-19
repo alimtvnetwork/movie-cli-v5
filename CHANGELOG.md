@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.128.1
+
+### Fixed
+- **golangci-lint clean** — fixed five lint failures introduced across v2.125.0–v2.128.0:
+  - `doctor/checks.go`: gofmt — collapsed double-spaces in const block alignment.
+  - `doctor/diagnose.go`: gofmt — normalised numbered-list indent in package doc comment (3-space → 2-space) and converted the file-prefix doc comment to a proper `Package doctor` comment.
+  - `doctor/diagnose.go`: govet fieldalignment — reordered `Report` struct fields (strings first, slice last) to drop padding from 64 → 56 pointer bytes.
+  - `cmd/doctor.go`: misspell — `catalogued` → `cataloged`.
+  - `updater/self_replace.go`: misspell — `Behaviour` → `Behavior`.
+
 ## v2.128.0
 
 ### Added
