@@ -1,12 +1,22 @@
 name: Release
 
 on:
+  ## Trigger ONLY on release/** branches.
+  ## We intentionally do NOT trigger on `v*` tags — the
+  ## `softprops/action-gh-release@v2` step below CREATES the tag as part of
+  ## publishing the release. If we also triggered on tags, GitHub would fire
+  ## a SECOND parallel workflow run for the same version, which races the
+  ## first run and clobbers the release halfway through asset upload —
+  ## leaving a partial release with missing archives. This actually
+  ## happened on v2.97.0 (3 of 6 archives missing).
+  ## See: spec/12-ci-cd-pipeline/05-ci-cd-issues/07-release-dual-trigger-race.md
   push:
     branches:
       - "release/**"
-    tags:
-      - "v*"
 
+## Concurrency is per release branch so a re-push of the same release/vX.Y.Z
+## branch never races itself. cancel-in-progress: false because partial
+## release uploads must NEVER be interrupted.
 concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false
@@ -34,12 +44,12 @@ jobs:
       - name: Resolve version
         id: version
         run: |
-          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
-            VERSION="${GITHUB_REF_NAME}"
-          elif [[ "$GITHUB_REF" == refs/heads/release/* ]]; then
+          ## Tags are NOT a trigger anymore (see top of file). The release
+          ## tag is CREATED by softprops/action-gh-release at publish time.
+          if [[ "$GITHUB_REF" == refs/heads/release/* ]]; then
             VERSION="${GITHUB_REF_NAME#release/}"
           else
-            echo "::error::Unexpected ref: $GITHUB_REF"
+            echo "::error::Unexpected ref: $GITHUB_REF (this workflow only runs on release/** branches)"
             exit 1
           fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"

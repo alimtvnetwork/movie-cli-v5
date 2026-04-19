@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.128.5
+
+### Fixed
+- **Release dual-trigger race that produced partial v2.97.0 release** — investigation of the v2.97.0 missing-archives incident found TWO workflow runs fired for the same release: branch push `release/v2.97.0` (Run 24534322512, succeeded with 6 archives) and tag push `v2.97.0` (Run 24534323295, fired ~2s later because `softprops/action-gh-release` creates the tag, then **failed at the publish step after partially overwriting** the already-published assets, leaving 3 of 6 archives missing). Concurrency group `release-${{ github.ref }}` did not protect because the two refs (`refs/heads/release/v2.97.0` vs `refs/tags/v2.97.0`) hashed to different groups.
+- **`.github/workflows/release.yml`** — removed the `tags: ["v*"]` trigger entirely. The release tag is **created by** `softprops/action-gh-release` at publish time, so triggering on it produces a self-inflicted second run. Workflow now triggers ONLY on `release/**` branch pushes. Updated the `Resolve version` step to reject any non-`release/**` ref with a clear error.
+
+### Documentation
+- **New `spec/12-ci-cd-pipeline/05-ci-cd-issues/07-release-dual-trigger-race.md`** — full RCA with workflow run IDs, evidence table, root cause walkthrough, the fix, prevention rules, and recovery procedure for partially-uploaded releases.
+
 ## v2.128.4
 
 ### Fixed
