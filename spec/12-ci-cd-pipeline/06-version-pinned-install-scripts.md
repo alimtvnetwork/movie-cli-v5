@@ -113,6 +113,15 @@ version match.
   THEN they contain NO call to `bootstrap.sh`, `bootstrap.ps1`, or any
   sibling-repo probing logic.
 
+- GIVEN any push to `release/**`
+  WHEN the `Enforce version-pinning contract on install scripts` step runs
+  THEN it greps both `dist/install.ps1` and `dist/install.sh` for the
+  forbidden strings (`releases/latest/`, `bootstrap.sh`, `bootstrap.ps1`)
+  AND verifies the `PINNED_VERSION` / `$PinnedVersion` literal equals
+  the resolved release version, AND fails the workflow with
+  `::error file=...::` annotations if any check fails — BEFORE the
+  release upload step runs.
+
 ---
 
 ## Prevention rule for future AI edits
@@ -126,6 +135,10 @@ version match.
 The pinned literal is the contract. If "always-latest" install is
 needed, that lives in `README.md` (which uses the GitHub `/latest/`
 redirect) — never in the per-release script.
+
+The contract is enforced automatically by the
+`Enforce version-pinning contract on install scripts` step in
+`.github/workflows/release.yml` — do not remove or weaken it.
 
 ---
 
