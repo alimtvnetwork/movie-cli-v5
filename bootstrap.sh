@@ -1,7 +1,19 @@
 #!/usr/bin/env bash
 # bootstrap.sh — Version-discovery bootstrap (Bash equivalent of bootstrap.ps1).
 #
+# ─── AUTHORITATIVE LOCATION FOR SIBLING-REPO PROBING ──────────────────────
+# This file (and bootstrap.ps1) are the ONLY place in the repository that
+# probes sibling -v<N+k> repositories. Audited 2026-04-20.
+#
+# DO NOT add sibling-repo probing, -v<N> URL discovery, or "find newer
+# version" logic to:
+#   - .github/workflows/release.yml install.{ps1,sh} generators
+#     → those MUST stay version-pinned. See spec/12-ci-cd-pipeline/06-version-pinned-install-scripts.md
+#   - The `movie update` command (it self-updates within a fixed repo)
+#   - README install one-liners (they use /releases/latest/)
+#
 # Implements spec/03-general/05-install-latest-sibling-repo.md.
+# ──────────────────────────────────────────────────────────────────────────
 #
 # Given the starting repo URL embedded below, probes sibling repos
 # (-v<N+k>) on the same GitHub owner, picks the highest existing one,

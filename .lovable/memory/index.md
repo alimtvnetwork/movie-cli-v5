@@ -36,6 +36,7 @@ Release-page install scripts MUST be version-pinned: `install.{ps1,sh}` attached
 - [Suggestions](mem://suggestions/01-suggestions) — Active suggestion tracker with priority levels
 - [Reliability report](mem://reports/01-reliability-risk-report) — Failure map, corrective actions, readiness decision
 - [Guideline violations audit](mem://audit/01-guideline-violations) — Full audit: nested ifs, magic strings, oversized funcs/files, 7-phase fix plan
+- [Sibling-probing audit](mem://audit/02-sibling-probing-locations) — Confirms bootstrap.{sh,ps1} are the ONLY -v<N+k> probers. Re-audit before adding cross-repo URL discovery.
 - [Version bump rule](mem://preferences/version-bump) — Always bump version after every code change
 - [API base variable](mem://preferences/api-base-variable) — JS must use single API_BASE variable, never repeat URL
 - [Boolean naming](mem://constraints/boolean-no-negative-words) — IsUndone→IsReverted; never use un/not/no in boolean names
