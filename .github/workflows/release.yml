@@ -136,6 +136,19 @@ jobs:
           echo "OK — all 6 archives present"
 
       - name: Generate version-specific install script (PowerShell)
+        ## ────────────────────────────────────────────────────────────────────
+        ## VERSION-PINNING CONTRACT — DO NOT WEAKEN
+        ## See: spec/12-ci-cd-pipeline/06-version-pinned-install-scripts.md
+        ##
+        ## The script generated below is attached to the GitHub Release as
+        ## install.ps1 and MUST install the EXACT release tag — never
+        ## "latest", never via bootstrap.* delegation, never via sibling-repo
+        ## (-vN+1) probing. The "Enforce version-pinning contract" step
+        ## further down hard-fails the workflow if you regress this.
+        ##
+        ## Sibling-repo probing lives ONLY in repo-root bootstrap.{sh,ps1}.
+        ## Always-latest install lives ONLY in README.md (uses /releases/latest/).
+        ## ────────────────────────────────────────────────────────────────────
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           REPO="${{ github.repository }}"
@@ -143,6 +156,10 @@ jobs:
           cat > dist/install.ps1 << 'PSEOF'
           # movie CLI installer — compatible with: irm ... | iex
           # Usage: irm https://github.com/REPO_PLACEHOLDER/releases/download/VERSION_PLACEHOLDER/install.ps1 | iex
+          #
+          # VERSION-PINNED: $PinnedVersion below is baked at release time and
+          # installs that exact tag forever. Contract:
+          # https://github.com/REPO_PLACEHOLDER/blob/main/spec/12-ci-cd-pipeline/06-version-pinned-install-scripts.md
 
           $ErrorActionPreference = "Stop"
           $PinnedVersion = "VERSION_PLACEHOLDER"
