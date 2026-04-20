@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.131.0
+
+### Audited
+- **Sibling-repo probing isolation** — full repo grep for `MAX_LOOKAHEAD|find_latest_sibling|Find-LatestSibling|probe_install_script|Test-InstallScript|sibling|-v<N>` patterns confirms `bootstrap.sh` and `bootstrap.ps1` are the **only** two files that implement `-v<N+k>` sibling-repo probing. All other hits (`release.yml` enforcement step, `cmd/update.go` doc, `updater/cleanup.go`, `updater/repo.go`) refer to local sibling **directories** or are the **guard** against the pattern, not implementations of it. Audit memo: `.lovable/memory/audit/02-sibling-probing-locations.md`.
+
+### Added
+- **Top-of-file contract pointers in `.github/workflows/release.yml`** — both `Generate version-specific install script (PowerShell)` and `Generate version-specific install.sh` steps now have a 14-line YAML comment header pointing at `spec/12-ci-cd-pipeline/06-version-pinned-install-scripts.md`, explicitly forbidding sibling-repo probing / bootstrap delegation / `latest` redirects in the generated scripts, and noting that the `Enforce version-pinning contract` step will hard-fail any regression.
+- **Top-of-file contract pointers inside the generated `install.ps1` and `install.sh`** — added a 4-line comment block above the `$PinnedVersion` / `PINNED_VERSION` literal explaining the script is version-pinned and linking to the contract spec on GitHub. Verified with a simulated grep run that the new comment text contains no forbidden substrings (`releases/latest/`, `bootstrap.sh`, `bootstrap.ps1`) and the pinned-literal regex still matches.
+- **Top-of-file authority comment in `bootstrap.sh` and `bootstrap.ps1`** — explicit "AUTHORITATIVE LOCATION FOR SIBLING-REPO PROBING" block listing the three forbidden alternative locations (release-workflow generators, `movie update`, README) and pointing back at spec 06 + the audit date.
+
+### Documentation
+- **New audit memo `.lovable/memory/audit/02-sibling-probing-locations.md`** — records the search command, the false-positive table, and re-audit triggers (when to re-run the grep) so the isolation guarantee is preserved across future edits.
+
 ## v2.130.0
 
 ### Added
